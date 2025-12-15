@@ -1,20 +1,20 @@
-const themeSwitch = document.querySelector('.theme-switch input');
+const themeToggle = document.querySelector('.theme-toggle');
 
-if (themeSwitch) {
+if (themeToggle) {
   const setTheme = (isDark) => {
     if (isDark) {
       document.documentElement.classList.add('dark');
-      themeSwitch.checked = true;
+      themeToggle.textContent = '☀️';
     } else {
       document.documentElement.classList.remove('dark');
-      themeSwitch.checked = false;
+      themeToggle.textContent = '🌙';
     }
   };
 
-  themeSwitch.addEventListener('change', () => {
-    const isDark = themeSwitch.checked;
-    setTheme(isDark);
-    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  themeToggle.addEventListener('click', () => {
+    const isCurrentlyDark = document.documentElement.classList.contains('dark');
+    setTheme(!isCurrentlyDark);
+    localStorage.setItem('theme', !isCurrentlyDark ? 'dark' : 'light');
   });
 
   // Initial theme setup

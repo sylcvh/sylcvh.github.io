@@ -2,35 +2,12 @@
   --text: #000000;
   --link: #000000;
   --link-hover: #333333;
-  --switch-bg: rgba(0, 0, 0, 0.1);
-  --switch-knob: #ffffff;
 }
-
 html.dark {
-  --text: #000000;
+  --text: #000000; /* Keep black even in dark mode */
   --link: #000000;
   --link-hover: #333333;
-  --switch-bg: rgba(255, 255, 255, 0.2);
-  --switch-knob: #ffffff;
 }
-
-@keyframes gradient {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-@keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(40px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 body {
   margin: 0;
   height: 100vh;
@@ -43,121 +20,44 @@ body {
   color: var(--text);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   text-align: center;
-  transition: background 0.3s ease;
 }
-
 .container {
   position: relative;
   max-width: 500px;
   padding: 2rem;
 }
-
-/* Fancy Theme Toggle Switch */
-.theme-switch {
+.theme-toggle {
   position: absolute;
-  top: 30px;
-  right: 30px;
-  width: 70px;
-  height: 36px;
-}
-
-.theme-switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.slider {
-  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  font-size: 1.8rem;
   cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: var(--switch-bg);
-  border-radius: 34px;
-  transition: .4s;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 8px;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 28px;
-  width: 28px;
-  left: 4px;
-  bottom: 4px;
-  background: var(--switch-knob);
-  border-radius: 50%;
-  transition: .4s;
-  z-index: 2;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-}
-
-input:checked + .slider:before {
-  transform: translateX(34px);
-}
-
-.slider .icon {
-  font-size: 18px;
-  z-index: 1;
+  opacity: 0.8;
   transition: opacity 0.3s;
+  color: var(--text);
 }
-
-.slider .sun {
-  opacity: 0;
-}
-
-.slider .moon {
-  opacity: 1;
-}
-
-input:checked + .slider .sun {
-  opacity: 1;
-}
-
-input:checked + .slider .moon {
-  opacity: 0;
-}
-
-/* Font styling */
 h1 {
   margin: 0 0 1.5rem;
   font-size: 4rem;
   font-weight: 700;
   letter-spacing: -0.02em;
   line-height: 1.1;
-  opacity: 0;
-  animation: fadeUp 1.2s ease forwards;
-  animation-delay: 0.3s;
 }
-
 .subtitle {
   font-size: 1.2rem;
   font-weight: 400;
   margin-bottom: 3rem;
   opacity: 0.8;
-  opacity: 0;
-  animation: fadeUp 1.2s ease forwards;
-  animation-delay: 0.5s;
 }
-
 .links {
   display: flex;
   justify-content: center;
   gap: 2rem;
   flex-wrap: wrap;
   margin-top: 2rem;
-  opacity: 0;
-  animation: fadeUp 1.2s ease forwards;
-  animation-delay: 0.7s;
 }
-
 .links a {
   display: flex;
   align-items: center;
@@ -167,44 +67,29 @@ h1 {
   color: var(--link);
   transition: transform 0.3s ease;
 }
-
 .links a:hover {
-  transform: translateY(-5px) scale(1.1);
+  transform: translateY(-5px);
   color: var(--link-hover);
 }
-
 .links svg {
   width: 30px;
   height: 30px;
   fill: currentColor;
 }
-
 .project-links {
   margin-top: 3rem;
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
   gap: 2rem;
-  opacity: 0;
-  animation: fadeUp 1.2s ease forwards;
-  animation-delay: 0.9s;
 }
-
 .project-links a {
   color: var(--link);
   text-decoration: none;
   font-weight: 500;
-  font-size: 1.1rem;
-  transition: all 0.3s ease;
-  padding: 0.5rem 1.5rem;
-  border-radius: 25px;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(5px);
+  font-size: 1rem;
+  transition: color 0.3s ease;
 }
-
 .project-links a:hover {
   color: var(--link-hover);
-  background: rgba(255, 255, 255, 0.2);
-  transform: translateY(-3px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
