@@ -1,21 +1,24 @@
-// Theme toggle functionality
-const themeToggle = document.querySelector('.theme-toggle');
+// Theme toggle functionality with switch
+const themeCheckbox = document.getElementById('theme-checkbox');
 
 const setTheme = (isDark) => {
   if (isDark) {
     document.documentElement.classList.add('dark');
-    themeToggle.textContent = '☀️';
+    themeCheckbox.checked = true;
   } else {
     document.documentElement.classList.remove('dark');
-    themeToggle.textContent = '🌙';
+    themeCheckbox.checked = false;
   }
 };
 
-themeToggle.addEventListener('click', () => {
-  const isCurrentlyDark = document.documentElement.classList.contains('dark');
-  setTheme(!isCurrentlyDark);
-  localStorage.setItem('theme', !isCurrentlyDark ? 'dark' : 'light');
-});
+// Check if theme toggle exists before adding event listener
+if (themeCheckbox) {
+  themeCheckbox.addEventListener('change', () => {
+    const isCurrentlyDark = document.documentElement.classList.contains('dark');
+    setTheme(!isCurrentlyDark);
+    localStorage.setItem('theme', !isCurrentlyDark ? 'dark' : 'light');
+  });
+}
 
 // Initial theme setup
 const savedTheme = localStorage.getItem('theme');
@@ -31,37 +34,47 @@ if (cursor) {
   }, 500);
 }
 
-// Add hover effect to links
-const linkButtons = document.querySelectorAll('.link-button');
-linkButtons.forEach(button => {
-  button.addEventListener('mouseenter', () => {
-    button.style.transform = 'translateY(-2px)';
-  });
+// Underline animation on page load and hover
+document.addEventListener('DOMContentLoaded', () => {
+  const linkItems = document.querySelectorAll('.link-item');
   
-  button.addEventListener('mouseleave', () => {
-    button.style.transform = 'translateY(0)';
+  linkItems.forEach((item, index) => {
+    const underline = item.querySelector('.link-underline');
+    
+    // Initial animation
+    setTimeout(() => {
+      underline.style.transform = 'scaleX(0.2)';
+      setTimeout(() => {
+        underline.style.transform = 'scaleX(0)';
+      }, 800);
+    }, 1000 + (index * 200));
+    
+    // Hover effect
+    item.addEventListener('mouseenter', () => {
+      underline.style.transform = 'scaleX(1)';
+      underline.style.transition = 'transform 0.3s ease';
+    });
+    
+    item.addEventListener('mouseleave', () => {
+      underline.style.transform = 'scaleX(0)';
+      underline.style.transition = 'transform 0.3s ease';
+    });
   });
 });
 
-// Add subtle animation to description paragraphs
-const descriptionParagraphs = document.querySelectorAll('.description p');
-descriptionParagraphs.forEach((p, index) => {
-  p.style.opacity = '0';
-  p.style.transform = 'translateY(10px)';
-  p.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-  
-  setTimeout(() => {
-    p.style.opacity = '1';
-    p.style.transform = 'translateY(0)';
-  }, 300 + (index * 200));
-});
-
-// Add keyboard navigation
+// Add keyboard navigation for theme toggle
 document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') {
-    // Toggle theme with Escape key
-    const isCurrentlyDark = document.documentElement.classList.contains('dark');
-    setTheme(!isCurrentlyDark);
-    localStorage.setItem('theme', !isCurrentlyDark ? 'dark' : 'light');
+  if (e.key === 't' || e.key === 'T') {
+    // Toggle theme with T key
+    if (themeCheckbox) {
+      themeCheckbox.checked = !themeCheckbox.checked;
+      const isCurrentlyDark = document.documentElement.classList.contains('dark');
+      setTheme(!isCurrentlyDark);
+      localStorage.setItem('theme', !isCurrentlyDark ? 'dark' : 'light');
+    }
   }
 });
+
+// Add smooth transitions for theme changes
+document.documentElement.style.transition = 'background-color 0.3s ease, color 0.3s ease';
+document.body.style.transition = 'background-color 0.3s ease, color 0.3s ease';
