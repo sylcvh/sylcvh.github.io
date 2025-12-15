@@ -16,8 +16,6 @@ if (themeToggle) {
     setTheme(!isCurrentlyDark);
     localStorage.setItem('theme', !isCurrentlyDark ? 'dark' : 'light');
   });
-
-  // Initial theme setup
   const savedTheme = localStorage.getItem('theme');
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
   const isDark = savedTheme === 'dark' || (savedTheme === null && prefersDark);
