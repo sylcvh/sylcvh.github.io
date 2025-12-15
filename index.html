@@ -3,57 +3,90 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Cypher Discord Bot</title>
-    <!-- Replace with your custom favicon -->
-    <link rel="icon" type="image/png" href="Sylco Flav.png">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css" />
+    <title>sylcvh</title>
+    <style>
+      :root {
+        --bg: #ffffff;
+        --text: #1f2328;
+        --link: #0969da;
+        --link-hover: #0550ae;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #0d1117;
+          --text: #c9d1d9;
+          --link: #58a6ff;
+          --link-hover: #1f6feb;
+        }
+      }
+
+      body {
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--bg);
+        color: var(--text);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        text-align: center;
+      }
+
+      .container {
+        max-width: 420px;
+        padding: 2rem;
+      }
+
+      img {
+        width: 160px;
+        height: 160px;
+        border-radius: 50%;
+        border: 4px solid var(--text);
+        margin-bottom: 1.5rem;
+      }
+
+      h1 {
+        margin: 0 0 0.5rem;
+        font-size: 2.5rem;
+        font-weight: 600;
+      }
+
+      p {
+        margin: 0.5rem 0;
+        font-size: 1.1rem;
+        opacity: 0.9;
+      }
+
+      .links {
+        margin-top: 2rem;
+      }
+
+      .links a {
+        display: inline-block;
+        margin: 0 1rem;
+        color: var(--link);
+        text-decoration: none;
+        font-size: 1.1rem;
+        transition: color 0.2s;
+      }
+
+      .links a:hover {
+        color: var(--link-hover);
+      }
+    </style>
   </head>
   <body>
-    <!-- Theme Toggle Switch -->
-    <div class="theme-switch-wrapper">
-      <label class="theme-switch" for="theme-checkbox">
-        <input type="checkbox" id="theme-checkbox" aria-label="Toggle theme">
-        <div class="slider"></div>
-      </label>
-    </div>
-    
-    <main>
-      <h1 class="title">
-        <span class="title-text">Cypher</span>
-        <span class="title-cursor">|</span>
-      </h1>
-      <div class="subtitle">
-        Discord Bot
-      </div>
-      
-      <div class="description">
-        <p>Advanced security and utility bot for Discord servers.</p>
-        <p>Minimal, fast, and open-source.</p>
-      </div>
-      
-      <div class="links">
-        <a href="https://appeal.gg" class="link-item">
-          <span class="link-text">appeal.gg</span>
-          <span class="link-underline"></span>
-        </a>
-        <a href="#" class="link-item">
-          <span class="link-text">Cypher Discord Bot</span>
-          <span class="link-underline"></span>
-        </a>
-        <a href="#" class="link-item">
-          <span class="link-text">Donate</span>
-          <span class="link-underline"></span>
-        </a>
-        <a href="#" class="link-item">
-          <span class="link-text">Legal Notice</span>
-          <span class="link-underline"></span>
-        </a>
-      </div>
-    </main>
+    <div class="container">
+      <img src="https://avatars.githubusercontent.com/u/112990173?v=4" alt="sylcvh" />
+      <h1>sylcvh</h1>
+      <p>Minimal personal site hosted on GitHub Pages.</p>
+      <p>This domain is linked to my Discord profile.</p>
 
-    <script src="script.js"></script>
+      <div class="links">
+        <a href="https://github.com/sylcvh">GitHub</a>
+        <!-- Add more links here in the future if needed -->
+      </div>
+    </div>
   </body>
 </html>
