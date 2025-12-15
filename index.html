@@ -4,33 +4,204 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>sylcvh</title>
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="style.css" />
+    <style>
+      :root {
+        --text: #1f2328;
+        --link: #0969da;
+        --link-hover: #0550ae;
+        --card-bg: rgba(255, 255, 255, 0.25);
+        --card-border: rgba(255, 255, 255, 0.18);
+        --card-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        --button-bg: rgba(255, 255, 255, 0.3);
+      }
+
+      .dark {
+        --text: #c9d1d9;
+        --link: #58a6ff;
+        --link-hover: #1f6feb;
+        --card-bg: rgba(13, 17, 23, 0.5);
+        --card-border: rgba(255, 255, 255, 0.1);
+        --card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+        --button-bg: rgba(255, 255, 255, 0.1);
+      }
+
+      @keyframes gradient {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+      }
+
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(40px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      body {
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+        background-size: 400% 400%;
+        animation: gradient 15s ease infinite;
+        color: var(--text);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        text-align: center;
+      }
+
+      .container {
+        position: relative;
+        max-width: 450px;
+        padding: 3rem 2.5rem;
+        background: var(--card-bg);
+        border-radius: 20px;
+        border: 1px solid var(--card-border);
+        box-shadow: var(--card-shadow);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+      }
+
+      .theme-toggle {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: none;
+        border: none;
+        font-size: 1.8rem;
+        cursor: pointer;
+        opacity: 0.8;
+        transition: opacity 0.3s;
+      }
+
+      .theme-toggle:hover {
+        opacity: 1;
+      }
+
+      img {
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        border: 5px solid var(--text);
+        margin-bottom: 2rem;
+        transition: transform 0.4s ease;
+        opacity: 0;
+        animation: fadeUp 1.2s ease forwards;
+        animation-delay: 0.3s;
+      }
+
+      .container:hover img {
+        transform: scale(1.1);
+      }
+
+      h1 {
+        margin: 0 0 1rem;
+        font-size: 3rem;
+        font-weight: 600;
+        opacity: 0;
+        animation: fadeUp 1.2s ease forwards;
+        animation-delay: 0.5s;
+      }
+
+      p {
+        margin: 0.8rem 0;
+        font-size: 1.2rem;
+        opacity: 0.85;
+        opacity: 0;
+        animation: fadeUp 1.2s ease forwards;
+      }
+
+      p:first-of-type {
+        animation-delay: 0.7s;
+      }
+
+      p:last-of-type {
+        animation-delay: 0.9s;
+      }
+
+      .links {
+        margin-top: 3rem;
+        opacity: 0;
+        animation: fadeUp 1.2s ease forwards;
+        animation-delay: 1.1s;
+      }
+
+      .links a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        padding: 16px 32px;
+        background: var(--button-bg);
+        border-radius: 50px;
+        color: var(--link);
+        text-decoration: none;
+        font-size: 1.3rem;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s, box-shadow 0.3s, color 0.3s;
+      }
+
+      .links a:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+        color: var(--link-hover);
+      }
+
+      .links svg {
+        width: 28px;
+        height: 28px;
+      }
+    </style>
   </head>
   <body>
     <div class="container">
-      <button class="theme-toggle" aria-label="Toggle theme">🌙</button>      
-      <h1>sylcvh</h1>      
-      <div class="subtitle">
-        Full Stack Developer
-      </div>
+      <button class="theme-toggle" aria-label="Toggle theme">🌙</button>
+      <img src="https://avatars.githubusercontent.com/u/112990173?v=4" alt="sylcvh" />
+      <h1>sylcvh</h1>
+      <p>Minimal personal site hosted on GitHub Pages.</p>
+      <p>This domain is linked to my Discord profile.</p>
       <div class="links">
-        <a href="https://discord.com/users/yourid" aria-label="Discord">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 127.14 96.36">
-            <path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/>
-          </svg>
-        </a>        
-        <a href="https://github.com/sylcvh" aria-label="GitHub">
-          <svg xmlns="http://www.w3.org2000/svg" viewBox="0 0 24 24">
+        <a href="https://github.com/sylcvh">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
             <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.458-1.165-1.12-1.488-1.12-1.488-.913-.626.069-.606.069-.606 1.01.07 1.543 1.04 1.543 1.04.897 1.538 2.353 1.095 2.929.837.092-.652.35-1.085.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.27.098-2.647 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.394.1 2.647.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.297c0-6.627-5.373-12-12-12"/>
           </svg>
+          GitHub
         </a>
       </div>
-      <div class="project-links">
-        <a href="https://discord.com/application-directory/yourbotid">Cypher Discord Bot</a> <!-- Renamed -->
-        <a href="https://donate.example.com">Donate</a>
-      </div>
     </div>
-    <script src="script.js"></script>
+
+    <script>
+      const themeToggle = document.querySelector('.theme-toggle');
+      if (themeToggle) {
+        const setTheme = (isDark) => {
+          if (isDark) {
+            document.documentElement.classList.add('dark');
+            themeToggle.textContent = '☀️';
+          } else {
+            document.documentElement.classList.remove('dark');
+            themeToggle.textContent = '🌙';
+          }
+        };
+
+        themeToggle.addEventListener('click', () => {
+          const isCurrentlyDark = document.documentElement.classList.contains('dark');
+          setTheme(!isCurrentlyDark);
+          localStorage.setItem('theme', !isCurrentlyDark ? 'dark' : 'light');
+        });
+
+        // Initial theme setup
+        const savedTheme = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const isDark = savedTheme === 'dark' || (savedTheme === null && prefersDark);
+        setTheme(isDark);
+      }
+    </script>
   </body>
 </html>
