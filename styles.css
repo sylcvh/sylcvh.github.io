@@ -1,20 +1,20 @@
 :root {
+  --text: #ffffff; /* Default to white text (dark mode) */
+  --link: #ffffff;
+  --link-hover: #ffffff;
+  --bg: #000000; /* Default to black background (dark mode) */
+  --accent: #ffffff;
+  --card-bg: rgba(255, 255, 255, 0.05);
+  --card-border: rgba(255, 255, 255, 0.1);
+}
+.light {
   --text: #000000;
   --link: #000000;
   --link-hover: #000000;
   --bg: #ffffff;
   --accent: #000000;
-  --card-bg: rgba(255, 255, 255, 0.95);
+  --card-bg: rgba(0, 0, 0, 0.05);
   --card-border: rgba(0, 0, 0, 0.1);
-}
-.dark {
-  --text: #ffffff;
-  --link: #ffffff;
-  --link-hover: #ffffff;
-  --bg: #000000;
-  --accent: #ffffff;
-  --card-bg: rgba(255, 255, 255, 0.05);
-  --card-border: rgba(255, 255, 255, 0.1);
 }
 @keyframes gradient {
   0% { background-position: 0% 50%; }
@@ -73,8 +73,8 @@ body::before {
   width: 100%;
   height: 100%;
   background: 
-    radial-gradient(circle at 20% 20%, rgba(0, 0, 0, 0.02) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(0, 0, 0, 0.02) 0%, transparent 50%);
+    radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.02) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.02) 0%, transparent 50%);
   pointer-events: none;
 }
 .theme-toggle-container {
@@ -101,7 +101,7 @@ body::before {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #000000;
+  background-color: #ffffff; /* White for dark mode (checked state) */
   transition: .4s;
   border-radius: 34px;
   border: 2px solid var(--text);
@@ -113,16 +113,16 @@ body::before {
   width: 26px;
   left: 2px;
   bottom: 2px;
-  background-color: #ffffff;
+  background-color: #000000; /* Black dot for dark mode */
   transition: .4s;
   border-radius: 50%;
 }
 input:checked + .slider {
-  background-color: #ffffff;
+  background-color: #000000; /* Black for light mode */
 }
 input:checked + .slider:before {
   transform: translateX(26px);
-  background-color: #000000;
+  background-color: #ffffff; /* White dot for light mode */
 }
 main {
   padding: 2rem;
@@ -184,11 +184,11 @@ main {
   font-weight: 500;
   font-size: 1rem;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 .link-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
   border-color: var(--accent);
   background: var(--card-bg);
   color: var(--link-hover);
