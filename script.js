@@ -22,3 +22,24 @@ if (themeCheckbox) {
   const isDark = savedTheme === 'dark' || (savedTheme === null && prefersDark);
   setTheme(isDark);
 }
+
+function typeWriter() {
+  const textElement = document.getElementById('typing-text');
+  const cursorElement = document.getElementById('typing-cursor');
+  const text = "Sylco™";
+  let i = 0;
+  
+  function type() {
+    if (i < text.length) {
+      textElement.innerHTML += text.charAt(i);
+      i++;
+      setTimeout(type, 150);
+    } else {
+      cursorElement.style.animation = 'blink 1s infinite';
+    }
+  }
+  
+  setTimeout(type, 500);
+}
+
+document.addEventListener('DOMContentLoaded', typeWriter);
