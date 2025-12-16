@@ -1,26 +1,25 @@
 const themeCheckbox = document.querySelector('#theme-checkbox');
 
 if (themeCheckbox) {
-  const setTheme = (isDark) => {
-    if (isDark) {
-      document.documentElement.classList.add('dark');
+  const setTheme = (isLight) => {
+    if (isLight) {
+      document.documentElement.classList.add('light');
       themeCheckbox.checked = true;
     } else {
-      document.documentElement.classList.remove('dark');
+      document.documentElement.classList.remove('light');
       themeCheckbox.checked = false;
     }
   };
 
   themeCheckbox.addEventListener('change', () => {
-    const isDark = themeCheckbox.checked;
-    setTheme(isDark);
-    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    const isLight = themeCheckbox.checked;
+    setTheme(isLight);
+    localStorage.setItem('theme', isLight ? 'light' : 'dark');
   });
 
   const savedTheme = localStorage.getItem('theme');
-  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  const isDark = savedTheme === 'dark' || (savedTheme === null && prefersDark);
-  setTheme(isDark);
+  const isLight = savedTheme === 'light';
+  setTheme(isLight);
 }
 
 function typeWriter() {

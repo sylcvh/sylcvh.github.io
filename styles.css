@@ -1,8 +1,8 @@
 :root {
-  --text: #ffffff; /* Default to white text (dark mode) */
+  --text: #ffffff;
   --link: #ffffff;
   --link-hover: #ffffff;
-  --bg: #000000; /* Default to black background (dark mode) */
+  --bg: #000000;
   --accent: #ffffff;
   --card-bg: rgba(255, 255, 255, 0.05);
   --card-border: rgba(255, 255, 255, 0.1);
@@ -101,7 +101,7 @@ body::before {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #ffffff; /* White for dark mode (checked state) */
+  background-color: #ffffff;
   transition: .4s;
   border-radius: 34px;
   border: 2px solid var(--text);
@@ -113,16 +113,16 @@ body::before {
   width: 26px;
   left: 2px;
   bottom: 2px;
-  background-color: #000000; /* Black dot for dark mode */
+  background-color: #000000;
   transition: .4s;
   border-radius: 50%;
 }
 input:checked + .slider {
-  background-color: #000000; /* Black for light mode */
+  background-color: #000000;
 }
 input:checked + .slider:before {
   transform: translateX(26px);
-  background-color: #ffffff; /* White dot for light mode */
+  background-color: #ffffff;
 }
 main {
   padding: 2rem;
