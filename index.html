@@ -1,92 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sylcvh</title>
-    <style>
-      :root {
-        --bg: #ffffff;
-        --text: #1f2328;
-        --link: #0969da;
-        --link-hover: #0550ae;
-      }
-
-      @media (prefers-color-scheme: dark) {
-        :root {
-          --bg: #0d1117;
-          --text: #c9d1d9;
-          --link: #58a6ff;
-          --link-hover: #1f6feb;
-        }
-      }
-
-      body {
-        margin: 0;
-        height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: var(--bg);
-        color: var(--text);
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        text-align: center;
-      }
-
-      .container {
-        max-width: 420px;
-        padding: 2rem;
-      }
-
-      img {
-        width: 160px;
-        height: 160px;
-        border-radius: 50%;
-        border: 4px solid var(--text);
-        margin-bottom: 1.5rem;
-      }
-
-      h1 {
-        margin: 0 0 0.5rem;
-        font-size: 2.5rem;
-        font-weight: 600;
-      }
-
-      p {
-        margin: 0.5rem 0;
-        font-size: 1.1rem;
-        opacity: 0.9;
-      }
-
-      .links {
-        margin-top: 2rem;
-      }
-
-      .links a {
-        display: inline-block;
-        margin: 0 1rem;
-        color: var(--link);
-        text-decoration: none;
-        font-size: 1.1rem;
-        transition: color 0.2s;
-      }
-
-      .links a:hover {
-        color: var(--link-hover);
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <img src="https://avatars.githubusercontent.com/u/112990173?v=4" alt="sylcvh" />
-      <h1>sylcvh</h1>
-      <p>Minimal personal site hosted on GitHub Pages.</p>
-      <p>This domain is linked to my Discord profile.</p>
-
-      <div class="links">
-        <a href="https://github.com/sylcvh">GitHub</a>
-        <!-- Add more links here in the future if needed -->
-      </div>
-    </div>
-  </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sylco™ - Full Stack Developer</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <button class="theme-toggle" aria-label="Toggle theme">🌙</button>
+    
+    <main>
+        <h1 class="title">
+            <span class="title-text">Sylco™</span>
+            <span class="title-cursor">_</span>
+        </h1>
+        
+        <div class="subtitle">Full Stack Developer</div>
+        
+        <div class="description">
+            <p>Creating digital experiences with clean code and modern design.</p>
+            <p>Specializing in full-stack development with a focus on performance and user experience.</p>
+        </div>
+        
+        <div class="links">
+            <a href="https://discord.com/users/your-discord-id" class="link-button" target="_blank" rel="noopener">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                </svg>
+                Discord
+            </a>
+            
+            <a href="https://github.com/sylcvh" class="link-button" target="_blank" rel="noopener">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+                </svg>
+                GitHub
+            </a>
+            
+            <a href="mailto:your.email@example.com" class="link-button" target="_blank" rel="noopener">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                    <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
+                Email
+            </a>
+        </div>
+    </main>
+    
+    <footer class="footer">
+        <div class="mono">Cypher Discord Bot</div>
+        <div class="mono">Donate</div>
+    </footer>
+    
+    <script src="script.js"></script>
+</body>
 </html>
