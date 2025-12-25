@@ -1,0 +1,18 @@
+[data-theme="light"] {
+  --metal-primary: rgba(50, 50, 70, 0.08);
+  --metal-secondary: rgba(80, 80, 100, 0.15);
+  --metal-accent: rgba(100, 100, 120, 0.25);
+  --liquid-metal: conic-gradient(from 0deg, rgba(50, 50, 70, 0.08), rgba(80, 80, 100, 0.12), rgba(100, 100, 120, 0.08));
+  --metal-highlight: rgba(255, 255, 255, 0.6);
+  --metal-shadow: rgba(0, 0, 0, 0.2);
+  --text-color: #0f1e2e;
+  --bg-primary: #f5f5f5;
+  --bg-secondary: #e8e8e8;
+  --bg-tertiary: #d8d8d8;
+  --bg-quaternary: #c8c8c8;
+  --radial-accent: rgba(100, 100, 120, 0.08);
+  --radial-accent2: rgba(80, 80, 100, 0.08);
+  --button-bg: rgba(255, 255, 255, 0.2);
+  --button-border: rgba(50, 50, 70, 0.15);
+  --toggle-border: rgba(0, 0, 0, 0.4);
+}
