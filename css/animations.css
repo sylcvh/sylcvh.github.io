@@ -40,9 +40,43 @@
   75% { transform: translate(-2px, -1px); }
 }
 
+@keyframes glossyPan {
+  0% { transform: translateX(-30%) rotate(0deg); }
+  50% { transform: translateX(30%) rotate(180deg); }
+  100% { transform: translateX(-30%) rotate(360deg); }
+}
+
+@keyframes liquidShine {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 120% 120%; }
+}
+
+@keyframes buttonSheen {
+  0% { transform: translateX(-140%) skewX(-15deg); opacity: 0; }
+  50% { opacity: 0.7; }
+  100% { transform: translateX(160%) skewX(-15deg); opacity: 0; }
+}
+
+@keyframes buttonPulse {
+  0%, 100% { box-shadow: 0 12px 28px rgba(0, 0, 0, 0.22), 0 0 0 0 rgba(146, 200, 210, 0.28); }
+  50% { box-shadow: 0 16px 36px rgba(0, 0, 0, 0.28), 0 0 0 12px rgba(146, 200, 210, 0.08); }
+}
+
+@keyframes buttonRipple {
+  0% { transform: scale(0); opacity: 0.8; }
+  100% { transform: scale(1.8); opacity: 0; }
+}
+
+@keyframes letterLift {
+  0% { transform: rotateX(-45deg) translateY(6px); opacity: 0.4; }
+  60% { transform: rotateX(12deg) translateY(-2px); opacity: 1; }
+  100% { transform: rotateX(0deg) translateY(0); opacity: 1; }
+}
+
 @keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
+  0%, 49% { opacity: 1; }
+  50%, 99% { opacity: 0; }
+  100% { opacity: 1; }
 }
 
 .metal-layer {
@@ -58,7 +92,7 @@
 }
 
 .refraction-overlay {
-  animation: refractionEffect 20s ease-in-out infinite;
+  animation: glossyPan 18s ease-in-out infinite;
 }
 
 .title-cursor {

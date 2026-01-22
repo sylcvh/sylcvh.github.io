@@ -31,13 +31,15 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: 
-    radial-gradient(circle at 10% 20%, var(--bg-primary) 0%, var(--bg-secondary) 100%),
+  background:
+    radial-gradient(120% 140% at 20% 20%, rgba(255, 255, 255, 0.08), transparent 60%),
+    radial-gradient(120% 140% at 80% 10%, rgba(255, 255, 255, 0.06), transparent 55%),
     linear-gradient(135deg, var(--bg-tertiary) 0%, var(--bg-quaternary) 100%);
   color: var(--text-color);
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   text-align: center;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
   position: relative;
   transition: background var(--transition-duration) ease,
               color var(--transition-duration) ease;
@@ -50,17 +52,31 @@ body::before {
   left: 0;
   width: 100%;
   height: 100%;
-  background: 
-    radial-gradient(circle at 20% 30%, var(--radial-accent) 0%, transparent 50%),
-    radial-gradient(circle at 80% 70%, var(--radial-accent2) 0%, transparent 50%);
+  background:
+    radial-gradient(circle at 25% 25%, var(--radial-accent) 0%, transparent 45%),
+    radial-gradient(circle at 75% 70%, var(--radial-accent2) 0%, transparent 50%);
   pointer-events: none;
   z-index: -1;
   transition: background var(--transition-duration) ease;
 }
 
+body::after {
+  content: '';
+  position: fixed;
+  inset: -20%;
+  background: linear-gradient(115deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0));
+  mix-blend-mode: screen;
+  opacity: 0.5;
+  filter: blur(32px);
+  pointer-events: none;
+  z-index: -1;
+  animation: glossyPan 22s ease-in-out infinite;
+}
+
 main {
   padding: 2rem;
   max-width: 800px;
+  width: 100%;
   margin: 0 auto;
   position: relative;
   z-index: 1;
