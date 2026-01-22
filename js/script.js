@@ -228,20 +228,29 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     if (bgMusic && musicToggle) {
-        function unlockAndPlayMusic() {
-            if (audioUnlocked) return;
+        // Attempt to autoplay on page load
+        bgMusic.play().then(() => {
+            musicToggle.classList.add('active');
+            localStorage.setItem('musicEnabled', 'true');
             audioUnlocked = true;
+        }).catch((err) => {
+            console.log('Autoplay prevented, waiting for user interaction:', err);
+            // Fallback: wait for user interaction if autoplay is blocked
+            function unlockAndPlayMusic() {
+                if (audioUnlocked) return;
+                audioUnlocked = true;
 
-            bgMusic.play().then(() => {
-                musicToggle.classList.add('active');
-                localStorage.setItem('musicEnabled', 'true');
-            }).catch((err) => {
-                console.log('Audio play failed:', err);
-            });
-        }
+                bgMusic.play().then(() => {
+                    musicToggle.classList.add('active');
+                    localStorage.setItem('musicEnabled', 'true');
+                }).catch((err) => {
+                    console.log('Audio play failed:', err);
+                });
+            }
 
-        document.body.addEventListener('click', unlockAndPlayMusic, { once: true });
-        document.body.addEventListener('touchstart', unlockAndPlayMusic, { once: true });
+            document.body.addEventListener('click', unlockAndPlayMusic, { once: true });
+            document.body.addEventListener('touchstart', unlockAndPlayMusic, { once: true });
+        });
 
         musicToggle.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -257,11 +266,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 localStorage.setItem('musicEnabled', 'false');
             }
         });
-
-        if (localStorage.getItem('musicEnabled') === 'true') {
-            musicToggle.classList.add('active');
-            bgMusic.play().catch(() => {});
-        }
     }
 
     function setupMetalSoundEffects() {
