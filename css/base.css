@@ -4,6 +4,54 @@
   box-sizing: border-box;
 }
 
+@media (pointer: fine) {
+  * {
+    cursor: none;
+  }
+  
+  .custom-cursor {
+    position: fixed;
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.15s ease, border-color 0.2s ease;
+    mix-blend-mode: difference;
+    transform: translate(-50%, -50%);
+  }
+
+  .cursor-dot {
+    position: fixed;
+    width: 4px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 10000;
+    transition: transform 0.1s ease;
+    mix-blend-mode: difference;
+    transform: translate(-50%, -50%);
+  }
+
+  .custom-cursor.hover {
+    transform: translate(-50%, -50%) scale(1.5);
+    border-color: rgba(255, 255, 255, 0.6);
+  }
+
+  .custom-cursor.click {
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+}
+
+@media (pointer: coarse) {
+  .custom-cursor,
+  .cursor-dot {
+    display: none;
+  }
+}
+
 :root {
   --metal-primary: rgba(200, 200, 220, 0.1);
   --metal-secondary: rgba(160, 160, 180, 0.2);
@@ -23,6 +71,13 @@
   --button-bg: rgba(200, 200, 220, 0.08);
   --button-border: rgba(160, 160, 180, 0.15);
   --toggle-border: var(--text-color);
+  --bg-layer-1: #0b0d14;
+  --bg-layer-2: #0f1320;
+  --bg-layer-3: #0a0d18;
+  --bg-accent-1: rgba(90, 140, 255, 0.28);
+  --bg-accent-2: rgba(120, 90, 255, 0.24);
+  --bg-accent-3: rgba(60, 200, 255, 0.18);
+  --bg-noise: rgba(255, 255, 255, 0.06);
 }
 
 body {
@@ -31,10 +86,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background:
-    radial-gradient(120% 140% at 20% 20%, rgba(255, 255, 255, 0.08), transparent 60%),
-    radial-gradient(120% 140% at 80% 10%, rgba(255, 255, 255, 0.06), transparent 55%),
-    linear-gradient(135deg, var(--bg-tertiary) 0%, var(--bg-quaternary) 100%);
+  background: var(--bg-primary);
   color: var(--text-color);
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   text-align: center;
@@ -45,32 +97,12 @@ body {
               color var(--transition-duration) ease;
 }
 
-body::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background:
-    radial-gradient(circle at 25% 25%, var(--radial-accent) 0%, transparent 45%),
-    radial-gradient(circle at 75% 70%, var(--radial-accent2) 0%, transparent 50%);
-  pointer-events: none;
-  z-index: -1;
-  transition: background var(--transition-duration) ease;
+.theme-transition {
+  animation: themeFade 0.6s ease;
 }
 
-body::after {
-  content: '';
-  position: fixed;
-  inset: -20%;
-  background: linear-gradient(115deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0));
-  mix-blend-mode: screen;
-  opacity: 0.5;
-  filter: blur(32px);
-  pointer-events: none;
-  z-index: -1;
-  animation: glossyPan 22s ease-in-out infinite;
+.theme-wave-overlay.active {
+  animation: waveExpand 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 main {

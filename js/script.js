@@ -20,49 +20,51 @@ document.addEventListener('DOMContentLoaded', function() {
         setTimeout(type, 500);
     }
 
-    function createMetalDrops() {
-        const container = document.getElementById('metal-drops');
-        const dropCount = 25;
-        
-        for (let i = 0; i < dropCount; i++) {
-            const drop = document.createElement('div');
-            drop.classList.add('metal-drop');
-            
-            drop.style.left = `${Math.random() * 100}vw`;
-            
-            const size = Math.random() * 6 + 4;
-            drop.style.width = `${size}px`;
-            drop.style.height = `${size}px`;
-            
-            const duration = Math.random() * 8 + 8;
-            drop.style.animationDuration = `${duration}s`;
-            drop.style.animationDelay = `${Math.random() * 5}s`;
-            
-            drop.style.background = getComputedStyle(document.documentElement).getPropertyValue('--metal-primary');
-            drop.style.boxShadow = `
-                0 0 ${size * 2}px rgba(160, 160, 180, 0.5),
-                inset 0 0 ${size}px rgba(255, 255, 255, 0.4)
-            `;
-            
-            container.appendChild(drop);
+    function initCustomCursor() {
+        // Only enable custom cursor on devices with mouse (not touch)
+        if (!window.matchMedia('(pointer: fine)').matches) {
+            return;
         }
-    }
 
-    function createMetalRippleEffect() {
-        document.addEventListener('click', function(e) {
-            const ripple = document.createElement('div');
-            ripple.classList.add('metal-ripple');
-            ripple.style.left = `${e.clientX}px`;
-            ripple.style.top = `${e.clientY}px`;
-            
-            const size = Math.random() * 50 + 50;
-            ripple.style.width = `${size}px`;
-            ripple.style.height = `${size}px`;
-            
-            document.body.appendChild(ripple);
-            
-            setTimeout(() => ripple.remove(), 1000);
+        const cursor = document.createElement('div');
+        const cursorDot = document.createElement('div');
+        cursor.classList.add('custom-cursor');
+        cursorDot.classList.add('cursor-dot');
+        document.body.appendChild(cursor);
+        document.body.appendChild(cursorDot);
+
+        let mouseX = 0, mouseY = 0;
+        let cursorX = 0, cursorY = 0;
+        let dotX = 0, dotY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            dotX = e.clientX;
+            dotY = e.clientY;
+            cursorDot.style.left = dotX + 'px';
+            cursorDot.style.top = dotY + 'px';
         });
+
+        function animateCursor() {
+            const diffX = mouseX - cursorX;
+            const diffY = mouseY - cursorY;
+            cursorX += diffX * 0.15;
+            cursorY += diffY * 0.15;
+            cursor.style.left = cursorX + 'px';
+            cursor.style.top = cursorY + 'px';
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        const interactiveElements = document.querySelectorAll('a, button, input, .link-button, .theme-switch, .music-toggle');
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+        });
+
+        document.addEventListener('mousedown', () => cursor.classList.add('click'));
+        document.addEventListener('mouseup', () => cursor.classList.remove('click'));
     }
 
     function initButtonEffects() {
@@ -171,6 +173,29 @@ document.addEventListener('DOMContentLoaded', function() {
         if (themeCheckbox) {
             themeCheckbox.checked = theme === 'light';
         }
+
+        // Trigger wavy transition on theme change
+        document.documentElement.classList.add('theme-transition');
+        const waveOverlay = document.querySelector('.theme-wave-overlay');
+        if (waveOverlay) {
+            waveOverlay.classList.add('active');
+            setTimeout(() => {
+                waveOverlay.classList.remove('active');
+            }, 400);
+        }
+        
+        // Shake background layers
+        const bgLayers = document.querySelectorAll('.bg-layer');
+        bgLayers.forEach((layer, index) => {
+            layer.style.animation = 'none';
+            setTimeout(() => {
+                layer.style.animation = '';
+            }, 50 + index * 20);
+        });
+        
+        setTimeout(() => {
+            document.documentElement.classList.remove('theme-transition');
+        }, 600);
 
         // Keep mobile browser chrome in sync with the active theme
         if (themeMeta) {
@@ -290,83 +315,9 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Lightweight Three.js scene for a metallic hero object
-    function initLiquidMetalScene() {
-        const canvas = document.getElementById('liquid-metal-canvas');
-        if (!canvas || !window.THREE) return;
-
-        const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        renderer.setSize(window.innerWidth, window.innerHeight);
-
-        const scene = new THREE.Scene();
-
-        const camera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 0.1, 100);
-        camera.position.set(0, 0.6, 4);
-        scene.add(camera);
-
-        const light1 = new THREE.DirectionalLight(0xffffff, 1.1);
-        light1.position.set(2, 3, 4);
-        scene.add(light1);
-
-        const light2 = new THREE.PointLight(0x9fc9d6, 0.8, 10);
-        light2.position.set(-3, -1, 2);
-        scene.add(light2);
-
-        const ambient = new THREE.HemisphereLight(0xdde6ff, 0x0a0a0a, 0.65);
-        scene.add(ambient);
-
-        const geometry = new THREE.TorusKnotGeometry(0.9, 0.26, 220, 32, 2, 3);
-        const material = new THREE.MeshPhysicalMaterial({
-            color: 0xc8d4e0,
-            metalness: 1,
-            roughness: 0.18,
-            clearcoat: 0.6,
-            clearcoatRoughness: 0.15,
-            envMapIntensity: 1.1,
-            sheen: 0.25,
-            sheenRoughness: 0.4,
-            transmission: 0,
-        });
-
-        const mesh = new THREE.Mesh(geometry, material);
-        mesh.rotation.set(0.4, 0.2, 0);
-        scene.add(mesh);
-
-        function handleResize() {
-            const w = window.innerWidth;
-            const h = window.innerHeight;
-            renderer.setSize(w, h);
-            camera.aspect = w / h;
-            camera.updateProjectionMatrix();
-        }
-
-        window.addEventListener('resize', handleResize);
-
-        function animate() {
-            mesh.rotation.y += 0.005;
-            mesh.rotation.x += 0.0025;
-            renderer.render(scene, camera);
-            requestAnimationFrame(animate);
-        }
-
-        animate();
-    }
-
-    const overlay = document.querySelector('.refraction-overlay');
-    if (overlay) {
-        window.addEventListener('mousemove', function(e) {
-            const moveX = (e.clientX / window.innerWidth - 0.5) * 30;
-            const moveY = (e.clientY / window.innerHeight - 0.5) * 30;
-            overlay.style.transform = `translateX(${moveX}px) translateY(${moveY}px)`;
-        });
-    }
-
     typeWriter();
-    createMetalDrops();
-    createMetalRippleEffect();
+    initCustomCursor();
     initButtonEffects();
     initBinarySubtitle();
     setupMetalSoundEffects();
-    initLiquidMetalScene();
 });

@@ -1,49 +1,41 @@
-@keyframes liquidMetalFlow {
+
+
+@keyframes subtlePulse {
   0%, 100% { 
-    transform: translateY(0) scale(1); 
-    filter: brightness(1);
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
   }
   50% { 
-    transform: translateY(-5px) scale(1.02); 
-    filter: brightness(1.1);
+    opacity: 0.6;
+    transform: translate(-50%, -50%) scale(1.1);
   }
 }
 
-@keyframes metalDropFall {
-  0% { 
-    transform: translateY(-100px) scale(1); 
-    opacity: 0;
+@keyframes gradientShift {
+  0%, 100% {
+    background-position: 0% 50%;
   }
-  10% { opacity: 0.8; }
-  90% { opacity: 0.8; }
-  100% { 
-    transform: translateY(100vh) scale(0.5); 
-    opacity: 0;
+  50% {
+    background-position: 100% 50%;
   }
 }
 
-@keyframes metalRipple {
-  0% { 
-    transform: scale(0); 
-    opacity: 1;
+@keyframes subtleMove {
+  0% {
+    background-position: 0% 0%;
   }
-  100% { 
-    transform: scale(4); 
-    opacity: 0;
+  100% {
+    background-position: 100% 0%;
   }
 }
 
-@keyframes refractionEffect {
-  0%, 100% { transform: translate(0, 0); }
-  25% { transform: translate(2px, -1px); }
-  50% { transform: translate(-1px, 2px); }
-  75% { transform: translate(-2px, -1px); }
-}
-
-@keyframes glossyPan {
-  0% { transform: translateX(-30%) rotate(0deg); }
-  50% { transform: translateX(30%) rotate(180deg); }
-  100% { transform: translateX(-30%) rotate(360deg); }
+@keyframes gridFloat {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(50px, 50px);
+  }
 }
 
 @keyframes liquidShine {
@@ -67,6 +59,86 @@
   100% { transform: scale(1.8); opacity: 0; }
 }
 
+@keyframes bgDrift {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); }
+  25% { transform: translate3d(-3%, 2%, 0) scale(1.03) rotate(1deg); }
+  50% { transform: translate3d(3%, -3%, 0) scale(1.04) rotate(-1deg); }
+  75% { transform: translate3d(-2%, -2%, 0) scale(1.02) rotate(0.5deg); }
+}
+
+@keyframes accentSlide {
+  0% { background-position: 0% 0%, 0% 0%; }
+  100% { background-position: 120% 0%, 0% 0%; }
+}
+
+@keyframes glowPulse {
+  0%, 100% { opacity: 0.35; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.05); }
+}
+
+@keyframes themeFade {
+  0% { filter: saturate(0.6) brightness(0.9); opacity: 0.4; }
+  100% { filter: saturate(1) brightness(1); opacity: 1; }
+}
+
+@keyframes bgWave {
+  0% { transform: translate3d(-3%, 0, 0) rotate(0deg) scale(1); }
+  25% { transform: translate3d(2%, -2%, 0) rotate(5deg) scale(1.04); }
+  50% { transform: translate3d(3%, 2%, 0) rotate(-4deg) scale(1.05); }
+  75% { transform: translate3d(-2%, -3%, 0) rotate(3deg) scale(1.03); }
+  100% { transform: translate3d(-3%, 0, 0) rotate(0deg) scale(1); }
+}
+
+@keyframes buttonFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes buttonSheenAlt {
+  0% { transform: translateX(-140%) skewX(-15deg); opacity: 0; }
+  50% { opacity: 0.7; }
+  100% { transform: translateX(160%) skewX(-15deg); opacity: 0; }
+}
+
+@keyframes buttonGlow {
+  0%, 100% { 
+    box-shadow: 
+      0 0 20px rgba(146, 200, 210, 0.3),
+      inset 0 0 10px rgba(255, 255, 255, 0.1);
+  }
+  50% { 
+    box-shadow: 
+      0 0 30px rgba(146, 200, 210, 0.5),
+      0 0 15px rgba(146, 200, 210, 0.3),
+      inset 0 0 15px rgba(255, 255, 255, 0.2);
+  }
+}
+
+@keyframes themeWaveOverlay {
+  0% { clip-path: circle(0% at 50% 50%); opacity: 0.35; }
+  70% { clip-path: circle(140% at 50% 50%); opacity: 0.15; }
+  100% { clip-path: circle(160% at 50% 50%); opacity: 0; }
+}
+
+@keyframes waveExpand {
+  0% {
+    opacity: 0;
+    transform: scale(0.5) rotate(0deg);
+  }
+  40% {
+    opacity: 0.8;
+    transform: scale(1.2) rotate(180deg);
+  }
+  70% {
+    opacity: 0.4;
+    transform: scale(1.5) rotate(360deg);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2) rotate(540deg);
+  }
+}
+
 @keyframes letterLift {
   0% { transform: rotateX(-45deg) translateY(6px); opacity: 0.4; }
   60% { transform: rotateX(12deg) translateY(-2px); opacity: 1; }
@@ -77,22 +149,6 @@
   0%, 49% { opacity: 1; }
   50%, 99% { opacity: 0; }
   100% { opacity: 1; }
-}
-
-.metal-layer {
-  animation: liquidMetalFlow 15s ease-in-out infinite;
-}
-
-.layer-1 { animation-delay: 0s; animation-duration: 20s; }
-.layer-2 { animation-delay: 3s; animation-duration: 25s; }
-.layer-3 { animation-delay: 6s; animation-duration: 18s; }
-
-.metal-drop {
-  animation: metalDropFall linear infinite;
-}
-
-.refraction-overlay {
-  animation: glossyPan 18s ease-in-out infinite;
 }
 
 .title-cursor {

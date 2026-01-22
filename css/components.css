@@ -24,10 +24,13 @@
   position: absolute;
   cursor: pointer;
   top: 0; left: 0; right: 0; bottom: 0;
-  background-color: #b0b0b0; /* Metallic gray */
-  transition: .4s;
+  background: linear-gradient(135deg, rgba(40, 40, 50, 0.8), rgba(30, 30, 40, 0.9));
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   border-radius: 34px;
-  border: 2px solid var(--toggle-border);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.3),
+    inset 0 1px 2px rgba(255, 255, 255, 0.1);
 }
 
 .slider:before {
@@ -37,18 +40,32 @@
   width: 26px;
   left: 2px;
   bottom: 2px;
-  background-color: #080808; /* Dark metal knob */
-  transition: .4s;
+  background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   border-radius: 50%;
+  box-shadow: 
+    0 2px 6px rgba(0, 0, 0, 0.4),
+    inset 0 1px 2px rgba(255, 255, 255, 0.2);
 }
 
 input:checked + .slider {
-  background-color: #080808; /* Dark metal */
+  background: linear-gradient(135deg, rgba(230, 230, 240, 0.9), rgba(250, 250, 255, 0.95));
+  border-color: rgba(0, 0, 0, 0.1);
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.15),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.1);
 }
 
 input:checked + .slider:before {
   transform: translateX(26px);
-  background-color: #b0b0b0; /* Light metal knob */
+  background: linear-gradient(135deg, #f5f5f5, #ffffff);
+  box-shadow: 
+    0 2px 6px rgba(0, 0, 0, 0.2),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.slider:hover {
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
 .button-container {
@@ -58,6 +75,7 @@ input:checked + .slider:before {
   align-items: center;
   width: auto;
   perspective: 1200px;
+  animation: buttonFloat 8s ease-in-out infinite;
 }
 
 .link-button {
@@ -71,10 +89,9 @@ input:checked + .slider:before {
   gap: 0.75rem;
   padding: 1rem 2.15rem;
   background:
-    radial-gradient(circle at calc(50% + var(--mx) * 40px) calc(50% + var(--my) * 40px), rgba(255, 255, 255, 0.18), transparent 34%),
     linear-gradient(135deg, rgba(220, 230, 245, 0.2) 0%, rgba(140, 160, 190, 0.16) 46%, rgba(210, 220, 235, 0.18) 100%);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   border: 1px solid rgba(255, 255, 255, 0.22);
   border-radius: 18px;
   color: var(--text-color);
@@ -93,6 +110,12 @@ input:checked + .slider:before {
   touch-action: manipulation;
   overflow: hidden;
   transform-style: preserve-3d;
+  mask-image: radial-gradient(circle at 50% 50%, #fff 72%, #fff 100%);
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, #fff 72%, #fff 100%);
+}
+
+.link-button::before {
+  animation: buttonSheenAlt 2.8s ease-in-out infinite;
 }
 
 .link-button::before {
@@ -136,15 +159,16 @@ input:checked + .slider:before {
 .link-button:hover {
   transform: translateY(-10px) rotateX(calc(var(--my) * 12deg)) rotateY(calc(var(--mx) * -14deg)) scale(1.02);
   background:
-    radial-gradient(circle at calc(50% + var(--mx) * 44px) calc(50% + var(--my) * 44px), rgba(255, 255, 255, 0.22), transparent 38%),
     linear-gradient(135deg, rgba(230, 240, 255, 0.26) 0%, rgba(170, 190, 210, 0.2) 52%, rgba(220, 230, 245, 0.24) 100%);
   box-shadow:
     0 20px 42px rgba(0, 0, 0, 0.34),
     inset 0 2px 0 rgba(255, 255, 255, 0.26),
     inset 0 -2px 0 rgba(0, 0, 0, 0.14),
-    0 0 0 8px rgba(146, 200, 210, 0.08);
+    0 0 0 8px rgba(146, 200, 210, 0.08),
+    0 0 40px rgba(146, 200, 210, 0.4),
+    0 0 60px rgba(146, 200, 210, 0.2);
   border-color: rgba(255, 255, 255, 0.32);
-  filter: drop-shadow(0 16px 32px rgba(146, 200, 210, 0.22));
+  filter: drop-shadow(0 16px 32px rgba(146, 200, 210, 0.22)) brightness(1.1) saturate(1.2);
   animation: buttonPulse 2.4s ease-in-out infinite;
 }
 
@@ -354,8 +378,16 @@ input:checked + .slider:before {
   .music-toggle:hover + .volume-meter,
   .volume-meter:hover,
   .music-controls.expanded .volume-meter { width: auto; }
-  .link-button { padding: 0.95rem 1.4rem; font-size: 0.95rem; width: 100%; justify-content: center; }
-  .button-container { width: 100%; }
+  .link-button { 
+    padding: 1rem 2.15rem;
+    font-size: 1rem;
+    width: auto;
+    max-width: 100%;
+    justify-content: center;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+  .button-container { width: auto; }
   .button-metal-reflection { width: 70%; }
 }
 
