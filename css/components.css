@@ -12,12 +12,24 @@
   width: 60px;
   height: 34px;
   touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+}
+
+.theme-switch:focus,
+.theme-switch:active {
+  outline: none;
 }
 
 .theme-switch input {
   opacity: 0;
   width: 0;
   height: 0;
+  outline: none;
+}
+
+.theme-switch input:focus {
+  outline: none;
 }
 
 .slider {
@@ -31,6 +43,8 @@
   box-shadow: 
     0 4px 12px rgba(0, 0, 0, 0.3),
     inset 0 1px 2px rgba(255, 255, 255, 0.1);
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .slider:before {
@@ -68,6 +82,11 @@ input:checked + .slider:before {
   border-color: rgba(255, 255, 255, 0.2);
 }
 
+.slider:focus,
+.slider:active {
+  outline: none;
+}
+
 .button-container {
   position: relative;
   display: flex;
@@ -86,8 +105,10 @@ input:checked + .slider:before {
   --edge: rgba(255, 255, 255, 0.22);
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.75rem;
   padding: 1rem 2.15rem;
+  width: 180px;
   background:
     linear-gradient(135deg, rgba(220, 230, 245, 0.2) 0%, rgba(140, 160, 190, 0.16) 46%, rgba(210, 220, 235, 0.18) 100%);
   backdrop-filter: blur(14px);
@@ -381,7 +402,7 @@ input:checked + .slider:before {
   .link-button { 
     padding: 1rem 2.15rem;
     font-size: 1rem;
-    width: auto;
+    width: 180px;
     max-width: 100%;
     justify-content: center;
     backdrop-filter: blur(14px);
