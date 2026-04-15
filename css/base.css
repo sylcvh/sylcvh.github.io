@@ -13,12 +13,11 @@
     position: fixed;
     width: 20px;
     height: 20px;
-    border: 2px solid rgba(255, 255, 255, 0.3);
+    border: 2px solid var(--cursor-border);
     border-radius: 50%;
     pointer-events: none;
     z-index: 9999;
     transition: transform 0.15s ease, border-color 0.2s ease;
-    mix-blend-mode: difference;
     transform: translate(-50%, -50%);
   }
 
@@ -26,18 +25,17 @@
     position: fixed;
     width: 4px;
     height: 4px;
-    background: rgba(255, 255, 255, 0.8);
+    background: var(--cursor-dot);
     border-radius: 50%;
     pointer-events: none;
     z-index: 10000;
     transition: transform 0.1s ease;
-    mix-blend-mode: difference;
     transform: translate(-50%, -50%);
   }
 
   .custom-cursor.hover {
     transform: translate(-50%, -50%) scale(1.5);
-    border-color: rgba(255, 255, 255, 0.6);
+    border-color: var(--cursor-border-hover);
   }
 
   .custom-cursor.click {
@@ -60,7 +58,7 @@
   --metal-highlight: rgba(255, 255, 255, 0.5);
   --metal-shadow: rgba(0, 0, 0, 0.4);
   --text-color: #e8f4fc;
-  --transition-duration: 0.8s;
+  --transition-duration: 0.18s;
   --refraction-color: rgba(150, 150, 170, 0.3);
   --bg-primary: #0a0a0a;
   --bg-secondary: #050505;
@@ -78,6 +76,9 @@
   --bg-accent-2: rgba(120, 90, 255, 0.24);
   --bg-accent-3: rgba(60, 200, 255, 0.18);
   --bg-noise: rgba(255, 255, 255, 0.06);
+  --cursor-border: rgba(255, 255, 255, 0.3);
+  --cursor-border-hover: rgba(255, 255, 255, 0.6);
+  --cursor-dot: rgba(255, 255, 255, 0.8);
 }
 
 body {
@@ -93,8 +94,41 @@ body {
   overflow-x: hidden;
   overflow-y: auto;
   position: relative;
-  transition: background var(--transition-duration) ease,
-              color var(--transition-duration) ease;
+  isolation: isolate;
+  transition: color var(--transition-duration) ease;
+}
+
+.page-background {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.page-background::before,
+.page-background::after {
+  content: '';
+  position: absolute;
+  inset: -14%;
+  will-change: transform, opacity;
+}
+
+.page-background::before {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 34%, rgba(0, 0, 0, 0.1)),
+    repeating-linear-gradient(45deg, rgba(90, 140, 255, 0.11) 0 1px, transparent 1px 78px),
+    repeating-linear-gradient(-45deg, rgba(76, 210, 220, 0.07) 0 1px, transparent 1px 124px);
+  background-size: 100% 100%, 220px 220px, 260px 260px;
+  background-position: 0 0, 0 0, 0 0;
+  opacity: 0.88;
+  animation: pageFieldA 10s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-background::before {
+    animation-duration: 20s;
+  }
 }
 
 .theme-transition {
