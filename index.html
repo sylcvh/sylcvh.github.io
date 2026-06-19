@@ -8,7 +8,10 @@
 
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/layout.css">
-    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/theme-controls.css">
+    <link rel="stylesheet" href="css/button-controls.css">
+    <link rel="stylesheet" href="css/music-controls.css">
+    <link rel="stylesheet" href="css/lanyard.css">
     <link rel="stylesheet" href="css/animations.css">
     <link rel="stylesheet" href="css/themes.css">
 
@@ -50,6 +53,27 @@
 
             <div class="subtitle">Full Stack Developer</div>
 
+            <section class="lanyard-card" id="lanyard-card" data-lanyard-user-id="410172403163987968" aria-live="polite">
+                <div class="lanyard-card__avatar-wrap" aria-hidden="true">
+                    <img class="lanyard-card__avatar" alt="" loading="lazy" decoding="async">
+                </div>
+
+                <div class="lanyard-card__body">
+                    <div class="lanyard-card__title" data-lanyard-title>Connect your Discord ID</div>
+                    <div class="lanyard-card__handle" data-lanyard-handle>username</div>
+                    <div class="lanyard-card__subtitle" data-lanyard-subtitle>Set data-lanyard-user-id on this card to show live presence updates.</div>
+
+                    <div class="lanyard-card__meta">
+                        <span class="lanyard-chip" data-lanyard-status>
+                            <span class="lanyard-card__status-dot" aria-hidden="true"></span>
+                            <span class="lanyard-card__status-label" data-lanyard-status-label>Offline</span>
+                        </span>
+                    </div>
+
+                    <div class="lanyard-card__kv" data-lanyard-kv hidden></div>
+                </div>
+            </section>
+
             <div class="links">
                 <div class="button-container">
                     <a href="https://discord.gg/Zygr52jpme" class="link-button" target="_blank" rel="noopener">
@@ -88,6 +112,13 @@
         <source src="assets/audio/Figuratives.mp3" type="audio/mp3">
     </audio>
 
-    <script src="js/script.js"></script>
+    <script src="js/typing.js"></script>
+    <script src="js/custom-cursor.js"></script>
+    <script src="js/button-effects.js"></script>
+    <script src="js/subtitle-effect.js"></script>
+    <script src="js/theme-toggle.js"></script>
+    <script src="js/music-controls.js"></script>
+    <script src="js/interaction-sfx.js"></script>
+    <script src="js/lanyard-presence.js"></script>
 </body>
 </html>

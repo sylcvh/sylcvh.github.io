@@ -193,6 +193,118 @@
   100% { transform: translateY(0) skewX(0deg); opacity: 1; }
 }
 
+.slash-letter.is-revealing {
+  animation: slashPop 0.58s cubic-bezier(0.2, 0.9, 0.2, 1) both;
+}
+
+.subtitle:hover .slash-letter.locked {
+  color: #b6f3ff;
+  text-shadow: 0 0 14px rgba(146, 200, 210, 0.45);
+}
+
+@keyframes slashPop {
+  0% {
+    transform: translateY(8px) scale(0.88) skewX(-18deg);
+    opacity: 0.12;
+    filter: blur(1px);
+  }
+  45% {
+    transform: translateY(-2px) scale(1.12) skewX(8deg);
+    opacity: 1;
+    filter: blur(0);
+  }
+  100% {
+    transform: translateY(0) scale(1) skewX(0deg);
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+@keyframes cardEntrance {
+  0% {
+    opacity: 0;
+    transform: translateY(22px) scale(0.975);
+    filter: blur(6px) saturate(0.8);
+  }
+  70% {
+    opacity: 1;
+    transform: translateY(-2px) scale(1.01);
+    filter: blur(0) saturate(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0) saturate(1);
+  }
+}
+
+@keyframes cardSheen {
+  0% {
+    transform: translateX(-120%) skewX(-18deg);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.22;
+  }
+  45% {
+    opacity: 0.4;
+  }
+  100% {
+    transform: translateX(170%) skewX(-18deg);
+    opacity: 0;
+  }
+}
+
+@keyframes cardGlow {
+  0%, 100% {
+    opacity: 0.32;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.58;
+    transform: scale(1.06);
+  }
+}
+
+@keyframes cardContentRise {
+  0% {
+    opacity: 0;
+    transform: translateY(12px) scale(0.985);
+  }
+  70% {
+    opacity: 1;
+    transform: translateY(-1px) scale(1.005);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes chipRise {
+  0% {
+    opacity: 0;
+    transform: translateY(8px) scale(0.96);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(-1px) scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes avatarFloat {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-4px) scale(1.015);
+  }
+}
+
 @keyframes eqPulse {
   0%, 100% { height: 4px; opacity: 0.72; }
   35% { height: 12px; opacity: 1; }
@@ -205,10 +317,32 @@
   100% { opacity: 1; }
 }
 
+@keyframes statusBlink {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.72;
+    transform: scale(0.92);
+  }
+  60% {
+    opacity: 0.88;
+    transform: scale(0.97);
+  }
+}
+
 .title-cursor {
   animation: blink 1s infinite;
 }
 
 .metal-ripple {
   animation: metalRipple 1s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .title-cursor,
+  .metal-ripple {
+    animation: none;
+  }
 }
