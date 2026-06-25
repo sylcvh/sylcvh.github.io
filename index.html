@@ -1,124 +1,392 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
+    <script>
+        (function () {
+            var saved = localStorage.getItem('metalTheme');
+            var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            var theme = saved === 'light' || saved === 'dark' ? saved : (prefersDark ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', theme);
+            var meta = document.querySelector('meta[name="theme-color"]');
+            if (meta) meta.setAttribute('content', theme === 'light' ? '#f7f5f0' : '#09090e');
+        })();
+    </script>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#0a0a0a">
-    <title>Sylco™</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#09090e">
+    <meta name="description" content="Sylco — Full Stack Developer crafting meaningful digital experiences through code, design, and technology.">
+    <title>Sylco™ | Full Stack Developer</title>
 
     <link rel="stylesheet" href="css/base.css">
-    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/site.css">
     <link rel="stylesheet" href="css/theme-controls.css">
-    <link rel="stylesheet" href="css/button-controls.css">
     <link rel="stylesheet" href="css/music-controls.css">
     <link rel="stylesheet" href="css/lanyard.css">
-    <link rel="stylesheet" href="css/animations.css">
-    <link rel="stylesheet" href="css/themes.css">
+    <link rel="stylesheet" href="css/button-controls.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500&family=Instrument+Serif:ital@0;1&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
 
     <link rel="icon" type="image/png" href="assets/images/Sylco Round.png">
 </head>
 <body>
-    <div class="page-background" aria-hidden="true"></div>
-    <div class="theme-toggle-container">
-        <label class="theme-switch" aria-label="Toggle dark/light theme">
-            <input type="checkbox" id="theme-checkbox">
-            <span class="slider"></span>
-        </label>
+    <div class="page-background" id="page-background" aria-hidden="true"></div>
+    <div class="scroll-progress" id="scroll-progress" aria-hidden="true"></div>
+
+    <div class="signal-bar" aria-hidden="true">
+        <div class="signal-bar__track">
+            <span>signal · full stack · design systems · live presence · open to work · signal · full stack · design systems · live presence · open to work ·</span>
+            <span aria-hidden="true">signal · full stack · design systems · live presence · open to work · signal · full stack · design systems · live presence · open to work ·</span>
+        </div>
     </div>
 
-        <div class="music-controls">
-            <div class="music-toggle" id="music-toggle" role="button" tabindex="0" aria-label="Toggle background music" aria-pressed="false">
-                <span class="music-main" aria-hidden="true">
-                    <span class="music-eq">
-                        <i></i><i></i><i></i><i></i>
-                    </span>
-                </span>
+    <div class="page-rail" aria-hidden="true">
+        <span class="page-rail__label">Sylco™</span>
+        <span class="page-rail__line"></span>
 
-                <div class="volume-control">
-                    <input type="range" id="volume-slider" min="0" max="100" value="50" aria-label="Volume control">
-                    <span class="volume-label" id="volume-label">50%</span>
+    </div>
+
+    <header class="header" id="header">
+        <a href="#hero" class="header__brand">
+            <img class="header__mark" src="assets/images/Sylco Round.png" alt="">
+            <span class="header__name">Sylco™</span>
+            <span class="header__live" aria-hidden="true"><i></i> live</span>
+        </a>
+
+        <nav class="header__nav" aria-label="Primary">
+            <a href="#about" class="header__link"><span>01</span> About</a>
+            <a href="#connect" class="header__link"><span>02</span> Connect</a>
+        </nav>
+
+        <div class="header__actions">
+            <div class="header__chrome" id="header-chrome">
+                <div class="music-controls">
+                    <div class="music-toggle" id="music-toggle" role="button" tabindex="0" aria-label="Toggle background music" aria-pressed="false">
+                        <span class="music-main" aria-hidden="true">
+                            <span class="music-toggle__label">Sound</span>
+                            <span class="music-eq"><i></i><i></i><i></i><i></i></span>
+                        </span>
+                        <div class="volume-control">
+                            <input type="range" id="volume-slider" min="0" max="100" value="50" aria-label="Volume control">
+                            <span class="volume-label" id="volume-label">50%</span>
+                        </div>
+                    </div>
                 </div>
+                <div class="theme-toggle-container">
+                    <label class="theme-switch" aria-label="Toggle dark/light theme">
+                        <input type="checkbox" id="theme-checkbox">
+                        <span class="theme-switch__track">
+                            <span class="theme-switch__icon theme-switch__icon--moon" aria-hidden="true">
+                                <svg viewBox="0 0 12 12" fill="none"><path d="M7.2 1.4A4.6 4.6 0 1 0 10.6 8 3.6 3.6 0 0 1 7.2 1.4Z" stroke="currentColor" stroke-width="1"/></svg>
+                            </span>
+                            <span class="theme-switch__icon theme-switch__icon--sun" aria-hidden="true">
+                                <svg viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="2.2" stroke="currentColor" stroke-width="1"/><path d="M6 1v1.2M6 9.8V11M1 6h1.2M9.8 6H11M2.5 2.5l.85.85M8.65 8.65l.85.85M2.5 9.5l.85-.85M8.65 3.35l.85-.85" stroke="currentColor" stroke-width="1" stroke-linecap="round"/></svg>
+                            </span>
+                            <span class="theme-switch__thumb"></span>
+                        </span>
+                    </label>
+                </div>
+            </div>
+            <button class="menu-btn" id="menu-trigger" type="button" aria-expanded="false" aria-controls="nav-panel">
+                <span class="menu-btn__bars" aria-hidden="true"><span></span><span></span><span></span></span>
+                <span class="menu-btn__label">Menu</span>
+            </button>
+        </div>
+    </header>
+
+    <nav class="nav-panel" id="nav-panel" aria-hidden="true">
+        <div class="nav-panel__backdrop" id="nav-backdrop"></div>
+        <div class="nav-panel__drawer">
+            <p class="nav-panel__eyebrow">Navigation</p>
+            <ul class="nav-panel__links">
+                <li><a class="nav-panel__link" href="#hero" data-nav-close><span class="nav-panel__index">00</span> Home</a></li>
+                <li><a class="nav-panel__link" href="#about" data-nav-close><span class="nav-panel__index">01</span> About</a></li>
+                <li><a class="nav-panel__link" href="#connect" data-nav-close><span class="nav-panel__index">02</span> Connect</a></li>
+            </ul>
+            <div class="nav-panel__meta">
+                <a href="mailto:xylcvh@gmail.com">xylcvh@gmail.com</a>
+                <a href="https://discord.gg/Zygr52jpme" target="_blank" rel="noopener">Discord Server</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main">
+        <section class="hero" id="hero">
+            <div class="hero__ambient" id="hero-three-host" aria-hidden="true"></div>
+            <h1 class="visually-hidden">Sylco — Full Stack Developer</h1>
+            <div class="hero__wave" aria-hidden="true">
+                <svg viewBox="0 0 400 80" preserveAspectRatio="none" fill="none">
+                    <path class="hero__wave-path" d="M0 40 Q50 10 100 40 T200 40 T300 40 T400 40" stroke="currentColor" stroke-width="1"/>
+                    <path class="hero__wave-path hero__wave-path--ghost" d="M0 48 Q50 18 100 48 T200 48 T300 48 T400 48" stroke="currentColor" stroke-width="0.5"/>
+                </svg>
+            </div>
+
+            <div class="wrap hero__stage">
+                <div class="hero__display">
+                    <p class="hero__tag reveal">
+                        <span class="hero__tag-dot" aria-hidden="true"></span>
+                        transmitting since 2023
+                    </p>
+                    <ul class="hero__layers reveal" aria-label="Full stack layers">
+                        <li class="hero__layer">
+                            <span class="hero__layer-num">03</span>
+                            <div class="hero__layer-copy">
+                                <span class="hero__layer-name">Design</span>
+                                <span class="hero__layer-desc">Layout, type & design systems</span>
+                            </div>
+                        </li>
+                        <li class="hero__layer">
+                            <span class="hero__layer-num">02</span>
+                            <div class="hero__layer-copy">
+                                <span class="hero__layer-name">Frontend</span>
+                                <span class="hero__layer-desc">Interfaces, motion & craft</span>
+                            </div>
+                        </li>
+                        <li class="hero__layer">
+                            <span class="hero__layer-num">01</span>
+                            <div class="hero__layer-copy">
+                                <span class="hero__layer-name">Backend</span>
+                                <span class="hero__layer-desc">APIs, data & infrastructure</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <aside class="hero__aside">
+                    <p class="hero__role reveal">
+                        <span id="typing-text">Sylco™</span><span class="hero__cursor" id="typing-cursor">▮</span>
+                    </p>
+                    <p class="hero__subtitle reveal">Full Stack Developer</p>
+                    <p class="hero__note reveal">I build interfaces, systems, and experiences that feel deliberate — where craft meets clarity.</p>
+                    <ul class="hero__stack reveal" aria-label="Focus areas">
+                        <li>Frontend</li>
+                        <li>Backend</li>
+                        <li>Design</li>
+                    </ul>
+                </aside>
+            </div>
+
+            <div class="hero__scroll-wrap" aria-hidden="false">
+                <a href="#about" class="hero__scroll" aria-label="Scroll to about">
+                    <span class="hero__scroll-line" aria-hidden="true"></span>
+                    <span>scroll</span>
+                </a>
+            </div>
+        </section>
+
+        <div class="marquee-band" aria-hidden="true">
+            <div class="marquee-band__inner">
+                <span>Build · Create · Ship · Iterate · Build · Create · Ship · Iterate ·</span>
+                <span>Build · Create · Ship · Iterate · Build · Create · Ship · Iterate ·</span>
             </div>
         </div>
 
-        <main>
-            <h1 class="title">
-                <span class="title-text" id="typing-text"></span>
-                <span class="title-cursor" id="typing-cursor">_</span>
-            </h1>
-
-            <div class="subtitle">Full Stack Developer</div>
-
-            <section class="lanyard-card" id="lanyard-card" data-lanyard-user-id="410172403163987968" aria-live="polite">
-                <div class="lanyard-card__avatar-wrap" aria-hidden="true">
-                    <img class="lanyard-card__avatar" alt="" loading="lazy" decoding="async">
-                </div>
-
-                <div class="lanyard-card__body">
-                    <div class="lanyard-card__title" data-lanyard-title>Connect your Discord ID</div>
-                    <div class="lanyard-card__handle" data-lanyard-handle>username</div>
-                    <div class="lanyard-card__subtitle" data-lanyard-subtitle>Set data-lanyard-user-id on this card to show live presence updates.</div>
-
-                    <div class="lanyard-card__meta">
-                        <span class="lanyard-chip" data-lanyard-status>
-                            <span class="lanyard-card__status-dot" aria-hidden="true"></span>
-                            <span class="lanyard-card__status-label" data-lanyard-status-label>Offline</span>
-                        </span>
+        <section class="section" id="about">
+            <div class="wrap section__grid">
+                <header class="section__head reveal">
+                    <span class="section__num">01</span>
+                    <div class="section__titles">
+                        <p class="section__eyebrow">Profile</p>
+                        <h2 class="section__title">About</h2>
                     </div>
-
-                    <div class="lanyard-card__kv" data-lanyard-kv hidden></div>
-                </div>
-            </section>
-
-            <div class="links">
-                <div class="button-container">
-                    <a href="https://discord.gg/Zygr52jpme" class="link-button" target="_blank" rel="noopener">
-                        <span class="button-content">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                                <path fill="currentColor" d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515a.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0a12.64 12.64 0 0 0-.617-1.25a.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057a19.9 19.9 0 0 0 5.993 3.03a.078.078 0 0 0 .084-.028a14.09 14.09 0 0 0 1.226-1.994a.076.076 0 0 0-.041-.106a13.107 13.107 0 0 1-1.872-.892a.077.077 0 0 1-.008-.128c.125-.094.25-.188.372-.284a.076.076 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.076.076 0 0 1 .078.01c.12.096.245.19.37.284a.077.077 0 0 1-.006.128a12.3 12.3 0 0 1-1.873.892a.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028a19.839 19.839 0 0 0 6.002-3.03a.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.956-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.955-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.946 2.418-2.157 2.418z"/>
-                            </svg>
-                            Discord
-                        </span>
-                    </a>
-                    <div class="button-metal-reflection"></div>
-                </div>
-
-                <div class="button-container">
-                    <a href="mailto:xylcvh@gmail.com" class="link-button" id="contact-button">
-                        <span class="button-content">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                                <polyline points="22,6 12,13 2,6"></polyline>
-                            </svg>
-                            Contact
-                        </span>
-                    </a>
-                    <div class="button-metal-reflection"></div>
+                </header>
+                <div class="about__content">
+                    <p class="about__lead reveal">Crafting meaningful experiences through strategy, code, and design.</p>
+                    <p class="about__body reveal">I build for clarity first — intuitive products, purposeful systems, and interfaces that feel human. Every project balances craft, performance, and long-term value.</p>
+                    <ul class="about__tags reveal">
+                        <li><span>01</span> Build</li>
+                        <li><span>02</span> Create</li>
+                        <li><span>03</span> Ship</li>
+                    </ul>
                 </div>
             </div>
+        </section>
 
-            <div class="footer-links">
-                <a href="https://discord.com/oauth2/authorize?client_id=1121314550969532476" class="footer-link" target="_blank" rel="noopener">Cypher Discord Bot</a>
-                <span class="footer-separator">•</span>
-                <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" class="footer-link" target="_blank" rel="noopener">Donate</a>
+        <section class="section section--facts" id="facts">
+            <div class="wrap">
+                <header class="section__head section__head--inline reveal">
+                    <span class="section__num">—</span>
+                    <h2 class="section__title">Key facts</h2>
+                </header>
+                <div class="facts">
+                    <article class="fact reveal">
+                        <span class="fact__num" data-count="5">5+</span>
+                        <span class="fact__label">projects shipped</span>
+                    </article>
+                    <span class="facts__divider" aria-hidden="true"></span>
+                    <article class="fact reveal">
+                        <span class="fact__num" data-count="2">2+</span>
+                        <span class="fact__label">years writing code</span>
+                    </article>
+                </div>
             </div>
-        </main>
+        </section>
 
-    <audio id="bg-music" loop preload="auto" autoplay>
-        <source src="assets/audio/LEGACY (slowed down).mp3" type="audio/mp3">
+        <section class="section section--presence" id="presence">
+            <div class="wrap">
+                <header class="section__head reveal">
+                    <span class="section__num">02</span>
+                    <div class="section__titles">
+                        <p class="section__eyebrow">Live feed</p>
+                        <h2 class="section__title">Presence</h2>
+                    </div>
+                </header>
+                <div class="presence-stage presence-wrap" id="presence-stage">
+                    <canvas class="presence-fx-canvas" id="presence-fx-canvas" aria-hidden="true"></canvas>
+                    <button type="button" class="presence-stage__hint" id="presence-blast-hint" aria-label="Hold to pulse presence signal">
+                        <span>hold to</span>
+                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="5.5" stroke="currentColor"/><path d="M7 4v6M4 7h6" stroke="currentColor" stroke-linecap="round"/></svg>
+                        <span>pulse</span>
+                    </button>
+                    <section class="lanyard-card" id="lanyard-card" data-lanyard-user-id="410172403163987968" aria-live="polite">
+                        <div class="lanyard-card__mesh" aria-hidden="true"></div>
+                        <div class="lanyard-card__glow" aria-hidden="true"></div>
+                        <div class="lanyard-card__scan" aria-hidden="true"></div>
+                        <span class="lanyard-card__corner lanyard-card__corner--tl" aria-hidden="true"></span>
+                        <span class="lanyard-card__corner lanyard-card__corner--tr" aria-hidden="true"></span>
+                        <span class="lanyard-card__corner lanyard-card__corner--bl" aria-hidden="true"></span>
+                        <span class="lanyard-card__corner lanyard-card__corner--br" aria-hidden="true"></span>
+
+                        <header class="lanyard-card__head presence-part">
+                            <div class="lanyard-card__head-left">
+                                <span class="lanyard-card__eyebrow">Live presence</span>
+                                <span class="lanyard-card__sync">
+                                    <span class="lanyard-card__sync-dot" aria-hidden="true"></span>
+                                    <span data-lanyard-sync>connecting</span>
+                                </span>
+                            </div>
+                            <span class="lanyard-chip" data-lanyard-status>
+                                <span class="lanyard-card__status-dot" aria-hidden="true"></span>
+                                <span class="lanyard-card__status-label" data-lanyard-status-label>Offline</span>
+                            </span>
+                        </header>
+
+                        <div class="lanyard-card__core">
+                            <aside class="lanyard-card__telemetry presence-part" aria-label="Presence telemetry">
+                                <div class="lanyard-card__waveform" aria-hidden="true">
+                                    <span></span><span></span><span></span><span></span><span></span>
+                                    <span></span><span></span><span></span><span></span><span></span>
+                                    <span></span><span></span><span></span><span></span><span></span>
+                                    <span></span><span></span><span></span><span></span><span></span>
+                                </div>
+                                <ul class="lanyard-card__metrics">
+                                    <li>
+                                        <span class="lanyard-card__metric-key">Signal</span>
+                                        <span class="lanyard-card__metric-val" data-lanyard-signal>—</span>
+                                    </li>
+                                </ul>
+
+                            </aside>
+
+                            <div class="lanyard-card__identity">
+                                <div class="lanyard-card__avatar-wrap presence-part">
+                                    <svg class="lanyard-card__orbit" viewBox="0 0 100 100" aria-hidden="true">
+                                        <circle class="lanyard-card__orbit-track" cx="50" cy="50" r="46" fill="none" stroke-width="1"/>
+                                        <circle class="lanyard-card__orbit-ring" cx="50" cy="50" r="46" fill="none" stroke-width="1.5" stroke-dasharray="72 216"/>
+                                    </svg>
+                                    <span class="lanyard-card__avatar-frame" aria-hidden="true"></span>
+                                    <img class="lanyard-card__avatar" alt="" loading="lazy" decoding="async">
+                                    <span class="lanyard-card__avatar-badge" data-lanyard-status-badge aria-hidden="true"></span>
+                                </div>
+                                <div class="lanyard-card__body">
+                                    <div class="lanyard-card__title presence-part" data-lanyard-title>Loading presence…</div>
+                                    <div class="lanyard-card__handle presence-part" data-lanyard-handle>username</div>
+                                    <div class="lanyard-card__activity presence-part">
+                                        <span class="lanyard-card__activity-label" data-lanyard-activity-type>Status</span>
+                                        <p class="lanyard-card__subtitle" data-lanyard-subtitle>Live Discord status</p>
+                                    </div>
+                                    <div class="lanyard-card__kv presence-part" data-lanyard-kv hidden></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <footer class="lanyard-card__foot" aria-hidden="true">
+                            <span class="lanyard-card__foot-line"></span>
+                            <span class="lanyard-card__foot-meta" data-lanyard-updated>awaiting sync</span>
+                        </footer>
+                    </section>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="connect">
+            <div class="wrap section__grid section__grid--connect">
+                <header class="section__head reveal">
+                    <span class="section__num">03</span>
+                    <div class="section__titles">
+                        <p class="section__eyebrow">Reach out</p>
+                        <h2 class="section__title">Connect</h2>
+                    </div>
+                </header>
+                <div class="connect__block">
+                    <p class="connect__text reveal">Open to collaboration, projects, and conversations. A short message is often the best place to begin.</p>
+                    <div class="connect__actions reveal">
+                        <div class="button-container">
+                            <a href="https://discord.gg/Zygr52jpme" class="link-button" target="_blank" rel="noopener">
+                                <span class="button-content">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515a.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0a12.64 12.64 0 0 0-.617-1.25a.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057a19.9 19.9 0 0 0 5.993 3.03a.078.078 0 0 0 .084-.028a14.09 14.09 0 0 0 1.226-1.994a.076.076 0 0 0-.041-.106a13.107 13.107 0 0 1-1.872-.892a.077.077 0 0 1-.008-.128c.125-.094.25-.188.372-.284a.076.076 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.076.076 0 0 1 .078.01c.12.096.245.19.37.284a.077.077 0 0 1-.006.128a12.3 12.3 0 0 1-1.873.892a.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028a19.839 19.839 0 0 0 6.002-3.03a.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.956-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.955-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.946 2.418-2.157 2.418z"/></svg>
+                                    Discord
+                                </span>
+                            </a>
+                        </div>
+                        <div class="button-container">
+                            <a href="mailto:xylcvh@gmail.com" class="link-button" id="contact-button">
+                                <span class="button-content">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                                    Contact
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <div class="wrap footer__inner">
+                <div class="footer__brand">
+                    <div class="footer__copyright">
+                        <img class="footer__logo" src="assets/images/Sylco Round.png" alt="">
+                        <div class="footer__copy">
+                            <p class="footer__mark">© Sylco™</p>
+                            <p>Built to mean something.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer__links">
+                    <a href="https://discord.com/oauth2/authorize?client_id=1121314550969532476" class="footer-link" target="_blank" rel="noopener">Cypher Discord Bot</a>
+                    <span aria-hidden="true">/</span>
+                    <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" class="footer-link" target="_blank" rel="noopener">Donate</a>
+                </div>
+            </div>
+        </footer>
+    </main>
+
+    <div class="scroll-top-wrap">
+        <button class="scroll-top" id="scroll-top" type="button" aria-label="Scroll to top" hidden>
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 15V5M5 10l5-5 5 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>Top</span>
+        </button>
+    </div>
+
+    <div class="mobile-sound-dock" id="mobile-sound-dock" aria-hidden="true"></div>
+
+    <audio id="bg-music" loop preload="auto">
+        <source src="assets/audio/Motorbike.mp3" type="audio/mp3">
     </audio>
 
-    <script src="js/typing.js"></script>
-    <script src="js/custom-cursor.js"></script>
-    <script src="js/button-effects.js"></script>
-    <script src="js/subtitle-effect.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+    <script src="js/site.js"></script>
+    <script src="js/navigation.js"></script>
     <script src="js/theme-toggle.js"></script>
     <script src="js/music-controls.js"></script>
-    <script src="js/interaction-sfx.js"></script>
+    <script src="js/mobile-controls.js"></script>
     <script src="js/lanyard-presence.js"></script>
+    <script src="js/presence-fx.js"></script>
+    <script src="js/custom-cursor.js"></script>
+    <script type="module" src="js/three-background.js"></script>
+    <script type="module" src="js/hero-three.js"></script>
 </body>
 </html>

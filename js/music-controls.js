@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     let audioUnlocked = false;
     const isCoarsePointer = window.matchMedia('(pointer: coarse)').matches;
+    const isMobileLayout = window.matchMedia('(max-width: 768px)').matches;
 
     const updateVolumeUi = (percentage) => {
         if (!volumeSlider) return;
@@ -94,7 +95,7 @@ document.addEventListener('DOMContentLoaded', function() {
         musicToggle.classList.toggle('expanded', expanded);
     };
 
-    if (isCoarsePointer) {
+    if (isCoarsePointer || isMobileLayout) {
         setExpanded(true);
     } else {
         musicToggle.addEventListener('mouseenter', () => setExpanded(true));

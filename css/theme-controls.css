@@ -1,139 +1,180 @@
 .theme-toggle-container {
-  position: fixed;
-  top: 44px;
-  right: 44px;
-  z-index: 1000;
-  padding: env(safe-area-inset-top) env(safe-area-inset-right) 0 0;
+  position: static;
+  padding: 0;
 }
 
 .theme-switch {
   position: relative;
-  display: inline-block;
-  width: 60px;
-  height: 34px;
+  display: inline-flex;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
 }
 
+.theme-switch.is-rippling .theme-switch__track {
+  animation: themeTrackSlosh 0.52s cubic-bezier(0.33, 1, 0.38, 1);
+}
+
+@keyframes themeTrackSlosh {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  25% { transform: scale(1.05) rotate(-1.5deg); }
+  55% { transform: scale(0.97) rotate(1deg); }
+  80% { transform: scale(1.02) rotate(-0.5deg); }
+}
+
 .theme-switch input {
+  position: absolute;
   opacity: 0;
-  width: 0;
-  height: 0;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  pointer-events: none;
 }
 
-.slider {
-  position: absolute;
+.theme-switch__track {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 68px;
+  height: 34px;
+  padding: 0 9px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius, 2px);
+  background: color-mix(in srgb, var(--bg) 60%, transparent);
   cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(135deg, rgba(40, 40, 50, 0.8), rgba(30, 30, 40, 0.9));
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  border-radius: 34px;
-  border: 2px solid rgba(255, 255, 255, 0.1);
-  box-shadow:
-    0 4px 12px rgba(0, 0, 0, 0.3),
-    inset 0 1px 2px rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  transition: border-color 0.25s ease, background 0.25s ease, box-shadow 0.3s ease;
 }
 
-.slider::before {
+.theme-switch__track::before {
+  content: '';
   position: absolute;
-  content: "";
-  height: 26px;
-  width: 26px;
-  left: 2px;
-  bottom: 2px;
-  background: linear-gradient(135deg, #d7e0ea, #b8c5d4);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  inset: 0;
+  background: linear-gradient(120deg, transparent, var(--accent-soft), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.5s ease;
+}
+
+.theme-switch__track:hover::before {
+  transform: translateX(100%);
+}
+
+.theme-switch__track:hover {
+  border-color: var(--accent);
+  box-shadow: 0 0 16px var(--accent-glow);
+}
+
+.theme-switch__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  color: var(--muted);
+  transition: color 0.3s ease, opacity 0.3s ease;
+  z-index: 1;
+}
+
+.theme-switch__icon svg {
+  width: 12px;
+  height: 12px;
+}
+
+.theme-switch__droplet {
+  position: absolute;
   border-radius: 50%;
-  box-shadow:
-    0 2px 6px rgba(0, 0, 0, 0.4),
-    inset 0 1px 2px rgba(255, 255, 255, 0.55);
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--accent) 42%, transparent) 0%,
+    color-mix(in srgb, var(--accent) 14%, transparent) 38%,
+    transparent 72%
+  );
+  transform: scale(0);
+  animation: themeSwitchDroplet 0.56s cubic-bezier(0.33, 1, 0.38, 1) forwards;
 }
 
-.theme-switch input:checked + .slider {
-  border-color: rgba(0, 0, 0, 0.1);
+@keyframes themeSwitchDroplet {
+  0% {
+    transform: scale(0);
+    opacity: 0.9;
+  }
+  45% {
+    opacity: 0.55;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
 }
 
-.theme-switch input:checked + .slider::before {
-  transform: translateX(26px);
+.theme-switch__thumb {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius, 2px);
+  border: 1px solid var(--line-hover, var(--line));
+  background: var(--text);
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--text) 20%, transparent);
+  transition: left 0.38s cubic-bezier(0.22, 1, 0.36, 1), background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  z-index: 2;
 }
 
-.theme-switch input:focus-visible + .slider {
-  box-shadow:
-    0 0 0 3px rgba(146, 200, 210, 0.35),
-    0 4px 12px rgba(0, 0, 0, 0.3),
-    inset 0 1px 2px rgba(255, 255, 255, 0.1);
+.theme-switch.is-rippling .theme-switch__thumb {
+  transition-duration: 0.48s;
+  transition-timing-function: cubic-bezier(0.33, 1, 0.38, 1);
 }
 
-.slider:hover {
-  border-color: rgba(255, 255, 255, 0.2);
+.theme-switch input:checked + .theme-switch__track .theme-switch__thumb {
+  left: calc(100% - 28px);
+  background: var(--accent);
+  border-color: var(--accent);
+  box-shadow: 0 0 12px var(--accent-glow);
+}
+
+.theme-switch input:not(:checked) + .theme-switch__track .theme-switch__icon--moon {
+  color: var(--text);
+  opacity: 1;
+}
+
+.theme-switch input:checked + .theme-switch__track .theme-switch__icon--sun {
+  color: var(--text);
+  opacity: 1;
+}
+
+.theme-switch input:focus-visible + .theme-switch__track {
+  outline: 1px solid var(--accent);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .theme-switch.is-rippling .theme-switch__track {
+    animation: none;
+  }
+
+  .theme-switch__droplet {
+    display: none;
+  }
 }
 
 @media (max-width: 768px) {
-  .theme-toggle-container {
-    top: 28px;
-    right: 28px;
+  .theme-switch__track {
+    width: 60px;
+    height: 30px;
+    padding: 0 7px;
   }
 
-  .theme-switch {
-    width: 50px;
-    height: 28px;
-  }
-
-  .slider::before {
-    height: 20px;
+  .theme-switch__thumb {
     width: 20px;
-    left: 2px;
-    bottom: 2px;
+    height: 20px;
+    top: 4px;
+    left: 4px;
   }
 
-  .theme-switch input:checked + .slider::before {
-    transform: translateX(22px);
-  }
-}
-
-@media (max-width: 480px) {
-  .theme-toggle-container {
-    top: 24px;
-    right: 24px;
-  }
-
-  .theme-switch {
-    width: 46px;
-    height: 26px;
-  }
-
-  .slider::before {
-    width: 18px;
-    height: 18px;
-  }
-
-  .theme-switch input:checked + .slider::before {
-    transform: translateX(20px);
-  }
-}
-
-@media (pointer: coarse) {
-  .theme-toggle-container {
-    top: 22px;
-    right: 22px;
-  }
-
-  .theme-switch {
-    width: 46px;
-    height: 26px;
-  }
-
-  .slider::before {
-    width: 18px;
-    height: 18px;
-    left: 2px;
-    bottom: 2px;
-  }
-
-  .theme-switch input:checked + .slider::before {
-    transform: translateX(20px);
+  .theme-switch input:checked + .theme-switch__track .theme-switch__thumb {
+    left: calc(100% - 24px);
   }
 }

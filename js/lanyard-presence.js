@@ -9,6 +9,12 @@ function initLanyardPresence() {
     const lanyardStatusLabel = document.querySelector('[data-lanyard-status-label]');
     const lanyardKv = document.querySelector('[data-lanyard-kv]');
     const lanyardAvatar = document.querySelector('.lanyard-card__avatar');
+    const lanyardSync = document.querySelector('[data-lanyard-sync]');
+    const lanyardSignal = document.querySelector('[data-lanyard-signal]');
+
+    const lanyardActivityType = document.querySelector('[data-lanyard-activity-type]');
+    const lanyardUpdated = document.querySelector('[data-lanyard-updated]');
+    const lanyardStatusBadge = document.querySelector('[data-lanyard-status-badge]');
 
     const userId = (lanyardCard.dataset.lanyardUserId || '').trim();
     if (!userId) {
@@ -105,13 +111,19 @@ function initLanyardPresence() {
         lanyardCard.classList.add(`is-${status === 'online' || status === 'idle' || status === 'dnd' ? status : 'offline'}`);
         lanyardCard.style.setProperty('--lanyard-accent', accent.color);
         lanyardCard.style.setProperty('--lanyard-accent-soft', accent.soft);
+        const stage = lanyardCard.closest('.presence-stage, .presence-wrap');
+        if (stage) {
+            stage.style.setProperty('--lanyard-accent', accent.color);
+            stage.style.setProperty('--lanyard-accent-soft', accent.soft);
+        }
 
         if (lanyardTitle) {
             lanyardTitle.textContent = getDisplayName(presence);
         }
 
         if (lanyardHandle) {
-            lanyardHandle.textContent = getHandle(presence);
+            const handle = getHandle(presence);
+            lanyardHandle.textContent = handle.startsWith('@') ? handle.slice(1) : handle;
         }
 
         if (lanyardSubtitle) {
@@ -122,6 +134,39 @@ function initLanyardPresence() {
             } else {
                 lanyardSubtitle.textContent = getActivityLabel(presence);
             }
+        }
+
+        if (lanyardActivityType) {
+            if (presence.listening_to_spotify && presence.spotify) {
+                lanyardActivityType.textContent = 'Spotify';
+            } else {
+                const active = (presence.activities || []).find((a) => a.type === 0 || a.type === 1 || a.type === 2 || a.type === 4);
+                if (!active) lanyardActivityType.textContent = 'Status';
+                else if (active.type === 0) lanyardActivityType.textContent = 'Playing';
+                else if (active.type === 1) lanyardActivityType.textContent = 'Streaming';
+                else if (active.type === 2) lanyardActivityType.textContent = 'Listening';
+                else lanyardActivityType.textContent = 'Custom';
+            }
+        }
+
+        if (lanyardSync) {
+            lanyardSync.textContent = status === 'offline' ? 'standby' : 'live';
+        }
+
+        if (lanyardSignal) {
+            const strength = status === 'online' ? 'strong'
+                : status === 'idle' ? 'stable'
+                    : status === 'dnd' ? 'focused' : 'weak';
+            lanyardSignal.textContent = strength;
+        }
+
+        if (lanyardUpdated) {
+            const now = new Date();
+            lanyardUpdated.textContent = `Synced ${now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+        }
+
+        if (lanyardStatusBadge) {
+            lanyardStatusBadge.dataset.status = status;
         }
 
         if (lanyardStatus) {
@@ -163,6 +208,11 @@ function initLanyardPresence() {
             lanyardAvatar.src = getAvatarUrl(presence);
             lanyardAvatar.alt = discordUser.username ? `${discordUser.username}'s Discord avatar` : 'Discord avatar';
         }
+
+        lanyardCard.dispatchEvent(new CustomEvent('lanyard:status', {
+            bubbles: true,
+            detail: { status, accent },
+        }));
     };
 
     const connectSocket = () => {
