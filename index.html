@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#07060f">
     <script>
         (function () {
             var saved = localStorage.getItem('metalTheme');
@@ -11,9 +14,6 @@
             if (meta) meta.setAttribute('content', theme === 'light' ? '#f3f5fb' : '#07060f');
         })();
     </script>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#07060f">
     <meta name="description" content="Sylco. Full stack developer. I ship websites and the APIs behind them.">
     <title>Sylco™ | Full stack developer</title>
 
@@ -35,13 +35,12 @@
     <div class="scroll-progress" id="scroll-progress" aria-hidden="true"></div>
 
     <div class="signal-bar" aria-hidden="true">
-        <div class="signal-bar__track" data-loop-track="signal · full stack · design systems · live presence · open to work"></div>
+        <div class="signal-bar__track" data-loop="signal · full stack · design systems · live presence · open to work · signal · full stack · design systems · live presence · open to work · signal · full stack · design systems · live presence · open to work · signal · full stack · design systems · live presence · open to work · signal · full stack · design systems · live presence · open to work · signal · full stack · design systems · live presence · open to work · "></div>
     </div>
 
     <div class="page-rail" aria-hidden="true">
         <span class="page-rail__label">Sylco™</span>
         <span class="page-rail__line"></span>
-
     </div>
 
     <header class="header" id="header">
@@ -70,20 +69,18 @@
                         </div>
                     </div>
                 </div>
-                <div class="theme-toggle-container">
-                    <label class="theme-switch" aria-label="Toggle dark/light theme">
-                        <input type="checkbox" id="theme-checkbox">
-                        <span class="theme-switch__track">
-                            <span class="theme-switch__icon theme-switch__icon--moon" aria-hidden="true">
-                                <svg viewBox="0 0 12 12" fill="none"><path d="M7.2 1.4A4.6 4.6 0 1 0 10.6 8 3.6 3.6 0 0 1 7.2 1.4Z" stroke="currentColor" stroke-width="1"/></svg>
-                            </span>
-                            <span class="theme-switch__icon theme-switch__icon--sun" aria-hidden="true">
-                                <svg viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="2.2" stroke="currentColor" stroke-width="1"/><path d="M6 1v1.2M6 9.8V11M1 6h1.2M9.8 6H11M2.5 2.5l.85.85M8.65 8.65l.85.85M2.5 9.5l.85-.85M8.65 3.35l.85-.85" stroke="currentColor" stroke-width="1" stroke-linecap="round"/></svg>
-                            </span>
-                            <span class="theme-switch__thumb"></span>
+                <label class="theme-switch" aria-label="Toggle dark/light theme">
+                    <input type="checkbox" id="theme-checkbox">
+                    <span class="theme-switch__track">
+                        <span class="theme-switch__icon theme-switch__icon--moon" aria-hidden="true">
+                            <svg viewBox="0 0 12 12" fill="none"><path d="M7.2 1.4A4.6 4.6 0 1 0 10.6 8 3.6 3.6 0 0 1 7.2 1.4Z" stroke="currentColor" stroke-width="1"/></svg>
                         </span>
-                    </label>
-                </div>
+                        <span class="theme-switch__icon theme-switch__icon--sun" aria-hidden="true">
+                            <svg viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="2.2" stroke="currentColor" stroke-width="1"/><path d="M6 1v1.2M6 9.8V11M1 6h1.2M9.8 6H11M2.5 2.5l.85.85M8.65 8.65l.85.85M2.5 9.5l.85-.85M8.65 3.35l.85-.85" stroke="currentColor" stroke-width="1" stroke-linecap="round"/></svg>
+                        </span>
+                        <span class="theme-switch__thumb"></span>
+                    </span>
+                </label>
             </div>
             <button class="menu-btn" id="menu-trigger" type="button" aria-expanded="false" aria-controls="nav-panel">
                 <span class="menu-btn__bars" aria-hidden="true"><span></span><span></span><span></span></span>
@@ -110,7 +107,6 @@
 
     <main class="main">
         <section class="hero" id="hero">
-            <div class="hero__ambient" id="hero-three-host" aria-hidden="true"></div>
             <h1 class="visually-hidden">Sylco, full stack developer</h1>
             <div class="hero__wave" aria-hidden="true">
                 <svg viewBox="0 0 400 80" preserveAspectRatio="none" fill="none">
@@ -173,7 +169,7 @@
         </section>
 
         <div class="marquee-band" aria-hidden="true">
-            <div class="marquee-band__inner" data-loop-track="ship it · break it · ship it again"></div>
+            <div class="marquee-band__inner" data-loop="ship it · break it · ship it again · ship it · break it · ship it again · ship it · break it · ship it again · ship it · break it · ship it again · ship it · break it · ship it again · ship it · break it · ship it again · ship it · break it · ship it again · ship it · break it · ship it again · "></div>
         </div>
 
         <section class="section" id="about">
@@ -217,7 +213,7 @@
             </div>
         </section>
 
-        <section class="section section--presence" id="presence">
+        <section class="section" id="presence">
             <div class="wrap">
                 <header class="section__head reveal">
                     <span class="section__num">02</span>
@@ -226,7 +222,7 @@
                         <h2 class="section__title">Presence</h2>
                     </div>
                 </header>
-                <div class="presence-stage presence-wrap" id="presence-stage">
+                <div class="presence-stage" id="presence-stage">
                     <button type="button" class="presence-stage__hint" id="presence-blast-hint" aria-label="Hold to pulse presence">
                         <span>hold to</span>
                         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="5.5" stroke="currentColor"/><path d="M7 4v6M4 7h6" stroke="currentColor" stroke-linecap="round"/></svg>
@@ -337,7 +333,7 @@
                             </a>
                         </div>
                         <div class="button-container">
-                            <a href="mailto:xylcvh@gmail.com" class="link-button" id="contact-button">
+                            <a href="mailto:xylcvh@gmail.com" class="link-button">
                                 <span class="button-content">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
                                     Contact
@@ -351,13 +347,11 @@
 
         <footer class="footer">
             <div class="wrap footer__inner">
-                <div class="footer__brand">
-                    <div class="footer__copyright">
-                        <img class="footer__logo" src="assets/images/Sylco Round.png" alt="">
-                        <div class="footer__copy">
-                            <p class="footer__mark">© Sylco™</p>
-                            <p>Shipping since 2023.</p>
-                        </div>
+                <div class="footer__copyright">
+                    <img class="footer__logo" src="assets/images/Sylco Round.png" alt="">
+                    <div class="footer__copy">
+                        <p class="footer__mark">© Sylco™</p>
+                        <p>Shipping since 2023.</p>
                     </div>
                 </div>
                 <div class="footer__links">
@@ -392,7 +386,5 @@
     <script src="js/lanyard-presence.js"></script>
     <script src="js/custom-cursor.js"></script>
     <script type="module" src="js/three-background.js"></script>
-    <script type="module" src="js/hero-three.js"></script>
-    <script type="module" src="js/presence-three.js"></script>
 </body>
 </html>

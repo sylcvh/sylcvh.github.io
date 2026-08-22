@@ -9,48 +9,24 @@ const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 export const quality = {
     mobile,
-    coarse,
     reduced,
     dpr: Math.min(window.devicePixelRatio || 1, mobile || coarse ? 1.15 : 1.6),
     antialias: !(mobile || coarse),
-    particles: mobile ? 420 : coarse ? 640 : 980,
-    presence: mobile ? 280 : coarse ? 420 : 720,
 };
 
-export const palettes = {
-    dark: {
-        red: 0xff3b5c,
-        cyan: 0x00e8ff,
-        blue: 0x4f7cff,
-        bg: 0x07060f,
-        surface: 0x12101c,
-        line: 0x3a3658,
-        faint: 0x1c1830,
-        text: 0x9aa3c7,
-    },
-    light: {
-        red: 0xe11d48,
-        cyan: 0x0891b2,
-        blue: 0x2563eb,
-        bg: 0xf3f5fb,
-        surface: 0xffffff,
-        line: 0xb8bdd0,
-        faint: 0xdedfea,
-        text: 0x5b6178,
-    },
+const palettes = {
+    dark: { red: 0xff3b5c, cyan: 0x00e8ff, blue: 0x4f7cff },
+    light: { red: 0xe11d48, cyan: 0x0891b2, blue: 0x2563eb },
 };
 
-export function themeKey() {
-    return document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
-}
-
-export function getPalette() {
-    return palettes[themeKey()];
+function getPalette() {
+    const light = document.documentElement.getAttribute('data-theme') === 'light';
+    return palettes[light ? 'light' : 'dark'];
 }
 
 export const pointer = { x: 0, y: 0, tx: 0, ty: 0 };
-export const clock = new THREE.Clock();
 export let scrollY = 0;
+const clock = new THREE.Clock();
 
 const themeListeners = [];
 export function onTheme(fn) {
@@ -74,7 +50,6 @@ new MutationObserver(applyTheme).observe(document.documentElement, {
     attributes: true,
     attributeFilter: ['data-theme'],
 });
-document.documentElement.addEventListener('theme:change', applyTheme);
 
 window.addEventListener('pointermove', (e) => {
     pointer.tx = (e.clientX / window.innerWidth) * 2 - 1;
@@ -104,7 +79,6 @@ if (canWebGL) {
         renderer.setClearColor(0x000000, 0);
         renderer.outputColorSpace = THREE.SRGBColorSpace;
         renderer.toneMapping = THREE.NoToneMapping;
-        renderer.autoClear = false;
     } catch {
         renderer = null;
     }
@@ -121,64 +95,23 @@ function resize() {
     views.forEach((view) => view.onResize?.());
 }
 
-function viewBox(el) {
-    if (!el || !renderer) return null;
-    const rect = el.getBoundingClientRect();
-    const canvasRect = renderer.domElement.getBoundingClientRect();
-    const vw = canvasRect.width;
-    const vh = canvasRect.height;
-    if (rect.width < 2 || rect.height < 2) return null;
-    if (rect.bottom < canvasRect.top || rect.top > canvasRect.bottom || rect.right < canvasRect.left || rect.left > canvasRect.right) return null;
-    return {
-        x: rect.left - canvasRect.left,
-        y: canvasRect.bottom - rect.bottom,
-        w: rect.width,
-        h: rect.height,
-        aspect: rect.width / Math.max(rect.height, 1),
-        vw,
-        vh,
-    };
-}
-
 let raf = 0;
 
 function tick() {
+    if (!renderer || document.hidden) {
+        raf = 0;
+        return;
+    }
     raf = requestAnimationFrame(tick);
-    if (!renderer || document.hidden) return;
 
     pointer.x += (pointer.tx - pointer.x) * 0.06;
     pointer.y += (pointer.ty - pointer.y) * 0.06;
 
-    const dt = Math.min(clock.getDelta(), 0.05);
     const t = clock.elapsedTime;
-
-    renderer.clear();
-
-    views.forEach((view, i) => {
-        const box = viewBox(view.host);
-        if (!box) return;
-
-        if (view.camera && view.camera.isPerspectiveCamera) {
-            view.camera.aspect = box.aspect;
-            view.camera.updateProjectionMatrix();
-        }
-
-        view.onFrame?.(t, dt, box);
-
-        if (view.full) {
-            renderer.setScissorTest(false);
-            renderer.setViewport(0, 0, renderer.domElement.clientWidth, renderer.domElement.clientHeight);
-        } else {
-            renderer.setScissorTest(true);
-            renderer.setViewport(box.x, box.y, box.w, box.h);
-            renderer.setScissor(box.x, box.y, box.w, box.h);
-        }
-
-        if (i > 0) renderer.clearDepth();
+    views.forEach((view) => {
+        view.onFrame?.(t);
         renderer.render(view.scene, view.camera);
     });
-
-    renderer.setScissorTest(false);
 }
 
 if (renderer) {

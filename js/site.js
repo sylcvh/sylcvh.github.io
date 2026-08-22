@@ -3,52 +3,10 @@ document.addEventListener('DOMContentLoaded', () => {
     initScrollTop();
     initScrollProgress();
     initHeader();
-    initLoopTracks();
     initReveals();
     initFactCounters();
-    initContact();
     initPresenceAnimations();
 });
-
-function initLoopTracks() {
-    const tracks = document.querySelectorAll('[data-loop-track]');
-    if (!tracks.length) return;
-
-    function paint(track) {
-        const host = track.parentElement;
-        const seed = (track.getAttribute('data-loop-track') || '').replace(/\s+/g, ' ').trim();
-        if (!host || !seed) return;
-
-        const unit = `${seed.replace(/\s*·\s*$/, '')} · `;
-        const probe = document.createElement('span');
-        probe.textContent = unit;
-        track.replaceChildren(probe);
-
-        let text = unit;
-        const target = Math.max(host.clientWidth, 320);
-        while (probe.offsetWidth < target) {
-            text += unit;
-            probe.textContent = text;
-        }
-
-        const first = document.createElement('span');
-        first.textContent = text;
-        const second = first.cloneNode(true);
-        second.setAttribute('aria-hidden', 'true');
-        track.replaceChildren(first, second);
-    }
-
-    function paintAll() {
-        tracks.forEach(paint);
-    }
-
-    paintAll();
-    let timer = 0;
-    window.addEventListener('resize', () => {
-        window.clearTimeout(timer);
-        timer = window.setTimeout(paintAll, 120);
-    }, { passive: true });
-}
 
 function initTyping() {
     const textEl = document.getElementById('typing-text');
@@ -202,16 +160,6 @@ function initFactCounters() {
         }, { threshold: 0.2 });
         const section = document.getElementById('facts');
         if (section) io.observe(section);
-    }
-}
-
-function initContact() {
-    const btn = document.getElementById('contact-button');
-    if (btn) {
-        btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            window.location.href = 'mailto:xylcvh@gmail.com';
-        });
     }
 }
 

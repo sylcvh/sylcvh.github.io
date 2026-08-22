@@ -3,7 +3,6 @@ import {
 } from './three-core.js';
 
 if (renderer) {
-    const host = document.getElementById('page-background');
     const scene = new THREE.Scene();
     const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
 
@@ -184,10 +183,8 @@ if (renderer) {
     tint();
 
     registerView({
-        host,
         scene,
         camera,
-        full: true,
         onFrame(t) {
             const motion = quality.reduced ? 0.12 : 1;
             uniforms.time.value = t * motion;

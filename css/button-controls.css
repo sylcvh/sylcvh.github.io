@@ -13,7 +13,7 @@
   padding: 1rem 1.4rem;
   border-radius: var(--radius, 2px);
   border: 1px solid var(--btn-border);
-  color: var(--text-color);
+  color: var(--text);
   text-decoration: none;
   font-family: var(--font-mono, 'IBM Plex Mono', monospace);
   font-size: 0.72rem;
@@ -99,6 +99,10 @@
 }
 
 @media (pointer: coarse) {
+  .link-button {
+    transition: none;
+  }
+
   .link-button:hover {
     transform: none;
   }

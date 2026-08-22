@@ -1,24 +1,8 @@
-.theme-toggle-container {
-  position: static;
-  padding: 0;
-}
-
 .theme-switch {
   position: relative;
   display: inline-flex;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
-}
-
-.theme-switch.is-rippling .theme-switch__track {
-  animation: themeTrackSlosh 0.52s cubic-bezier(0.33, 1, 0.38, 1);
-}
-
-@keyframes themeTrackSlosh {
-  0%, 100% { transform: scale(1) rotate(0deg); }
-  25% { transform: scale(1.05) rotate(-1.5deg); }
-  55% { transform: scale(0.97) rotate(1deg); }
-  80% { transform: scale(1.02) rotate(-0.5deg); }
 }
 
 .theme-switch input {
@@ -43,7 +27,6 @@
   background: color-mix(in srgb, var(--bg) 60%, transparent);
   cursor: pointer;
   overflow: hidden;
-  transition: border-color 0.25s ease, background 0.25s ease, box-shadow 0.3s ease;
 }
 
 .theme-switch__track::before {
@@ -71,42 +54,12 @@
   width: 14px;
   height: 14px;
   color: var(--muted);
-  transition: color 0.3s ease, opacity 0.3s ease;
   z-index: 1;
 }
 
 .theme-switch__icon svg {
   width: 12px;
   height: 12px;
-}
-
-.theme-switch__droplet {
-  position: absolute;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 0;
-  background: radial-gradient(
-    circle,
-    color-mix(in srgb, var(--accent) 42%, transparent) 0%,
-    color-mix(in srgb, var(--accent) 14%, transparent) 38%,
-    transparent 72%
-  );
-  transform: scale(0);
-  animation: themeSwitchDroplet 0.56s cubic-bezier(0.33, 1, 0.38, 1) forwards;
-}
-
-@keyframes themeSwitchDroplet {
-  0% {
-    transform: scale(0);
-    opacity: 0.9;
-  }
-  45% {
-    opacity: 0.55;
-  }
-  100% {
-    transform: scale(1);
-    opacity: 0;
-  }
 }
 
 .theme-switch__thumb {
@@ -116,16 +69,11 @@
   width: 24px;
   height: 24px;
   border-radius: var(--radius, 2px);
-  border: 1px solid var(--line-hover, var(--line));
+  border: 1px solid var(--line);
   background: var(--text);
   box-shadow: 0 2px 8px color-mix(in srgb, var(--text) 20%, transparent);
-  transition: left 0.38s cubic-bezier(0.22, 1, 0.36, 1), background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  transition: left 0.2s ease;
   z-index: 2;
-}
-
-.theme-switch.is-rippling .theme-switch__thumb {
-  transition-duration: 0.48s;
-  transition-timing-function: cubic-bezier(0.33, 1, 0.38, 1);
 }
 
 .theme-switch input:checked + .theme-switch__track .theme-switch__thumb {
@@ -150,31 +98,32 @@
   outline-offset: 3px;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .theme-switch.is-rippling .theme-switch__track {
-    animation: none;
-  }
-
-  .theme-switch__droplet {
-    display: none;
-  }
-}
-
 @media (max-width: 768px) {
   .theme-switch__track {
     width: 64px;
-    height: 36px;
+    height: 40px;
     padding: 0 8px;
   }
 
   .theme-switch__thumb {
-    width: 22px;
-    height: 22px;
-    top: 6px;
-    left: 6px;
+    width: 24px;
+    height: 24px;
+    top: 7px;
+    left: 7px;
   }
 
   .theme-switch input:checked + .theme-switch__track .theme-switch__thumb {
-    left: calc(100% - 24px);
+    left: calc(100% - 31px);
+  }
+}
+
+@media (pointer: coarse) {
+  .theme-switch__track::before {
+    content: none;
+  }
+
+  .theme-switch__track:hover {
+    border-color: var(--line);
+    box-shadow: none;
   }
 }

@@ -1,5 +1,4 @@
 /* ── Presence stage ── */
-.presence-wrap,
 .presence-stage {
   --lanyard-accent: var(--accent, #00e8ff);
   --lanyard-accent-soft: var(--accent-soft, rgba(0, 232, 255, 0.16));
@@ -12,18 +11,8 @@
   isolation: isolate;
 }
 
-.presence-wrap .lanyard-card,
 .presence-stage .lanyard-card {
   margin: 0;
-}
-
-.presence-fx-canvas {
-  position: absolute;
-  inset: -8% -4%;
-  width: 108%;
-  height: 116%;
-  pointer-events: none;
-  z-index: 0;
 }
 
 .presence-stage__hint {
@@ -80,10 +69,6 @@
   backdrop-filter: blur(18px);
   overflow: hidden;
   text-align: left;
-  transition:
-    border-color 0.45s ease,
-    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
-    box-shadow 0.45s ease;
 }
 
 .lanyard-card__mesh {
@@ -145,10 +130,6 @@
 .lanyard-card__corner--tr { top: 8px; right: 8px; border-width: 1px 1px 0 0; }
 .lanyard-card__corner--bl { bottom: 8px; left: 8px; border-width: 0 0 1px 1px; }
 .lanyard-card__corner--br { bottom: 8px; right: 8px; border-width: 0 1px 1px 0; }
-
-.presence-stage.is-visible .lanyard-card__corner {
-  opacity: 0.75;
-}
 
 .presence-stage.is-holding .lanyard-card,
 .presence-stage.is-pulsed .lanyard-card {
@@ -349,31 +330,6 @@
   flex: 0 0 auto;
   width: 92px;
   height: 92px;
-}
-
-.lanyard-card__orbit {
-  position: absolute;
-  inset: -10px;
-  width: calc(100% + 20px);
-  height: calc(100% + 20px);
-  pointer-events: none;
-  color: var(--lanyard-accent);
-}
-
-.lanyard-card__orbit-track {
-  stroke: color-mix(in srgb, var(--line) 70%, transparent);
-  opacity: 0.6;
-}
-
-.lanyard-card__orbit-ring {
-  stroke: var(--lanyard-accent);
-  opacity: 0.75;
-  transform-origin: center;
-  animation: orbitSpin 14s linear infinite;
-}
-
-@keyframes orbitSpin {
-  to { transform: rotate(360deg); }
 }
 
 .lanyard-card__avatar-frame {
@@ -752,7 +708,6 @@
 
 @media (prefers-reduced-motion: reduce) {
   .lanyard-card__waveform span,
-  .lanyard-card__orbit-ring,
   .lanyard-card__sync-dot,
   .lanyard-card__scan {
     animation: none;

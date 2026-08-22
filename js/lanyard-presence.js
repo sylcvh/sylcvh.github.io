@@ -22,7 +22,7 @@
     const albumEl = $('[data-lanyard-album]');
     const trackEl = $('[data-lanyard-track]');
     const progressEl = $('[data-lanyard-progress]');
-    const stage = card.closest('.presence-stage, .presence-wrap');
+    const stage = card.closest('.presence-stage');
     const hint = document.getElementById('presence-blast-hint');
 
     const restUrl = userId ? `https://api.lanyard.rest/v1/users/${encodeURIComponent(userId)}` : '';
@@ -94,7 +94,7 @@
             || null;
     }
 
-    function activityCopy(presence, status) {
+    function activityCopy(presence) {
         if (presence.listening_to_spotify && presence.spotify) {
             const song = presence.spotify.song || 'Spotify';
             const artist = presence.spotify.artist ? ` by ${presence.spotify.artist}` : '';
@@ -134,7 +134,7 @@
         if (title) title.textContent = user.global_name || user.display_name || user.username || 'Unknown';
         if (handle) handle.textContent = (user.username || '').replace(/^@/, '') || 'discord';
 
-        const copy = activityCopy(presence, status);
+        const copy = activityCopy(presence);
         if (activityType) activityType.textContent = copy.type;
         if (subtitle) subtitle.textContent = copy.text;
 
@@ -205,14 +205,7 @@
             avatar.alt = user.username ? `${user.username}'s Discord avatar` : 'Discord avatar';
         }
 
-        if (status !== lastStatus) {
-            lastStatus = status;
-            card.dispatchEvent(new CustomEvent('lanyard:status', { bubbles: true, detail: { status, accent } }));
-        }
-        card.dispatchEvent(new CustomEvent('lanyard:presence', {
-            bubbles: true,
-            detail: { status, accent, listening, activities: presence.activities || [] },
-        }));
+        lastStatus = status;
     }
 
     function fail(message) {
