@@ -8,14 +8,14 @@
             var theme = saved === 'light' || saved === 'dark' ? saved : (prefersDark ? 'dark' : 'light');
             document.documentElement.setAttribute('data-theme', theme);
             var meta = document.querySelector('meta[name="theme-color"]');
-            if (meta) meta.setAttribute('content', theme === 'light' ? '#f7f5f0' : '#09090e');
+            if (meta) meta.setAttribute('content', theme === 'light' ? '#f3f5fb' : '#07060f');
         })();
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#09090e">
-    <meta name="description" content="Sylco — Full Stack Developer crafting meaningful digital experiences through code, design, and technology.">
-    <title>Sylco™ | Full Stack Developer</title>
+    <meta name="theme-color" content="#07060f">
+    <meta name="description" content="Sylco. Full stack developer. I ship websites and the APIs behind them.">
+    <title>Sylco™ | Full stack developer</title>
 
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/site.css">
@@ -35,10 +35,7 @@
     <div class="scroll-progress" id="scroll-progress" aria-hidden="true"></div>
 
     <div class="signal-bar" aria-hidden="true">
-        <div class="signal-bar__track">
-            <span>signal · full stack · design systems · live presence · open to work · signal · full stack · design systems · live presence · open to work ·</span>
-            <span aria-hidden="true">signal · full stack · design systems · live presence · open to work · signal · full stack · design systems · live presence · open to work ·</span>
-        </div>
+        <div class="signal-bar__track" data-loop-track="signal · full stack · design systems · live presence · open to work"></div>
     </div>
 
     <div class="page-rail" aria-hidden="true">
@@ -114,7 +111,7 @@
     <main class="main">
         <section class="hero" id="hero">
             <div class="hero__ambient" id="hero-three-host" aria-hidden="true"></div>
-            <h1 class="visually-hidden">Sylco — Full Stack Developer</h1>
+            <h1 class="visually-hidden">Sylco, full stack developer</h1>
             <div class="hero__wave" aria-hidden="true">
                 <svg viewBox="0 0 400 80" preserveAspectRatio="none" fill="none">
                     <path class="hero__wave-path" d="M0 40 Q50 10 100 40 T200 40 T300 40 T400 40" stroke="currentColor" stroke-width="1"/>
@@ -140,7 +137,7 @@
                             <span class="hero__layer-num">02</span>
                             <div class="hero__layer-copy">
                                 <span class="hero__layer-name">Frontend</span>
-                                <span class="hero__layer-desc">Interfaces, motion & craft</span>
+                                <span class="hero__layer-desc">Pages, motion, what you click</span>
                             </div>
                         </li>
                         <li class="hero__layer">
@@ -157,8 +154,8 @@
                     <p class="hero__role reveal">
                         <span id="typing-text">Sylco™</span><span class="hero__cursor" id="typing-cursor">▮</span>
                     </p>
-                    <p class="hero__subtitle reveal">Full Stack Developer</p>
-                    <p class="hero__note reveal">I build interfaces, systems, and experiences that feel deliberate — where craft meets clarity.</p>
+                    <p class="hero__subtitle reveal">Full stack developer</p>
+                    <p class="hero__note reveal">I write the interface and the API. They should look like they came from the same person.</p>
                     <ul class="hero__stack reveal" aria-label="Focus areas">
                         <li>Frontend</li>
                         <li>Backend</li>
@@ -176,10 +173,7 @@
         </section>
 
         <div class="marquee-band" aria-hidden="true">
-            <div class="marquee-band__inner">
-                <span>Build · Create · Ship · Iterate · Build · Create · Ship · Iterate ·</span>
-                <span>Build · Create · Ship · Iterate · Build · Create · Ship · Iterate ·</span>
-            </div>
+            <div class="marquee-band__inner" data-loop-track="ship it · break it · ship it again"></div>
         </div>
 
         <section class="section" id="about">
@@ -192,12 +186,12 @@
                     </div>
                 </header>
                 <div class="about__content">
-                    <p class="about__lead reveal">Crafting meaningful experiences through strategy, code, and design.</p>
-                    <p class="about__body reveal">I build for clarity first — intuitive products, purposeful systems, and interfaces that feel human. Every project balances craft, performance, and long-term value.</p>
+                    <p class="about__lead reveal">Two years in. I'd rather ship than talk about process.</p>
+                    <p class="about__body reveal">Five projects out. Most of it is the web: pages, APIs, a Discord bot. I want people to use the thing without a walkthrough.</p>
                     <ul class="about__tags reveal">
-                        <li><span>01</span> Build</li>
-                        <li><span>02</span> Create</li>
-                        <li><span>03</span> Ship</li>
+                        <li><span>01</span> Web</li>
+                        <li><span>02</span> APIs</li>
+                        <li><span>03</span> Bots</li>
                     </ul>
                 </div>
             </div>
@@ -207,7 +201,7 @@
             <div class="wrap">
                 <header class="section__head section__head--inline reveal">
                     <span class="section__num">—</span>
-                    <h2 class="section__title">Key facts</h2>
+                    <h2 class="section__title">Numbers</h2>
                 </header>
                 <div class="facts">
                     <article class="fact reveal">
@@ -233,13 +227,12 @@
                     </div>
                 </header>
                 <div class="presence-stage presence-wrap" id="presence-stage">
-                    <canvas class="presence-fx-canvas" id="presence-fx-canvas" aria-hidden="true"></canvas>
-                    <button type="button" class="presence-stage__hint" id="presence-blast-hint" aria-label="Hold to pulse presence signal">
+                    <button type="button" class="presence-stage__hint" id="presence-blast-hint" aria-label="Hold to pulse presence">
                         <span>hold to</span>
                         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="5.5" stroke="currentColor"/><path d="M7 4v6M4 7h6" stroke="currentColor" stroke-linecap="round"/></svg>
                         <span>pulse</span>
                     </button>
-                    <section class="lanyard-card" id="lanyard-card" data-lanyard-user-id="410172403163987968" aria-live="polite">
+                    <section class="lanyard-card is-connecting" id="lanyard-card" data-lanyard-user-id="410172403163987968" aria-live="polite">
                         <div class="lanyard-card__mesh" aria-hidden="true"></div>
                         <div class="lanyard-card__glow" aria-hidden="true"></div>
                         <div class="lanyard-card__scan" aria-hidden="true"></div>
@@ -275,18 +268,22 @@
                                         <span class="lanyard-card__metric-key">Signal</span>
                                         <span class="lanyard-card__metric-val" data-lanyard-signal>—</span>
                                     </li>
+                                    <li>
+                                        <span class="lanyard-card__metric-key">Device</span>
+                                        <span class="lanyard-card__metric-val" data-lanyard-device>—</span>
+                                    </li>
+                                    <li>
+                                        <span class="lanyard-card__metric-key">Activity</span>
+                                        <span class="lanyard-card__metric-val" data-lanyard-activity-count>—</span>
+                                    </li>
                                 </ul>
 
                             </aside>
 
                             <div class="lanyard-card__identity">
                                 <div class="lanyard-card__avatar-wrap presence-part">
-                                    <svg class="lanyard-card__orbit" viewBox="0 0 100 100" aria-hidden="true">
-                                        <circle class="lanyard-card__orbit-track" cx="50" cy="50" r="46" fill="none" stroke-width="1"/>
-                                        <circle class="lanyard-card__orbit-ring" cx="50" cy="50" r="46" fill="none" stroke-width="1.5" stroke-dasharray="72 216"/>
-                                    </svg>
                                     <span class="lanyard-card__avatar-frame" aria-hidden="true"></span>
-                                    <img class="lanyard-card__avatar" alt="" loading="lazy" decoding="async">
+                                    <img class="lanyard-card__avatar" alt="" width="92" height="92" decoding="async">
                                     <span class="lanyard-card__avatar-badge" data-lanyard-status-badge aria-hidden="true"></span>
                                 </div>
                                 <div class="lanyard-card__body">
@@ -296,13 +293,22 @@
                                         <span class="lanyard-card__activity-label" data-lanyard-activity-type>Status</span>
                                         <p class="lanyard-card__subtitle" data-lanyard-subtitle>Live Discord status</p>
                                     </div>
+                                    <div class="lanyard-card__spotify" data-lanyard-spotify hidden>
+                                        <img class="lanyard-card__album" data-lanyard-album alt="" width="56" height="56">
+                                        <div class="lanyard-card__spotify-copy">
+                                            <p class="lanyard-card__track" data-lanyard-track></p>
+                                            <div class="lanyard-card__progress" aria-hidden="true">
+                                                <span data-lanyard-progress></span>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="lanyard-card__kv presence-part" data-lanyard-kv hidden></div>
                                 </div>
                             </div>
                         </div>
 
-                        <footer class="lanyard-card__foot" aria-hidden="true">
-                            <span class="lanyard-card__foot-line"></span>
+                        <footer class="lanyard-card__foot">
+                            <span class="lanyard-card__foot-line" aria-hidden="true"></span>
                             <span class="lanyard-card__foot-meta" data-lanyard-updated>awaiting sync</span>
                         </footer>
                     </section>
@@ -315,7 +321,7 @@
                 <header class="section__head reveal">
                     <span class="section__num">03</span>
                     <div class="section__titles">
-                        <p class="section__eyebrow">Reach out</p>
+                        <p class="section__eyebrow">Say hi</p>
                         <h2 class="section__title">Connect</h2>
                     </div>
                 </header>
@@ -350,7 +356,7 @@
                         <img class="footer__logo" src="assets/images/Sylco Round.png" alt="">
                         <div class="footer__copy">
                             <p class="footer__mark">© Sylco™</p>
-                            <p>Built to mean something.</p>
+                            <p>Shipping since 2023.</p>
                         </div>
                     </div>
                 </div>
@@ -373,7 +379,7 @@
     <div class="mobile-sound-dock" id="mobile-sound-dock" aria-hidden="true"></div>
 
     <audio id="bg-music" loop preload="auto">
-        <source src="assets/audio/Motorbike.mp3" type="audio/mp3">
+        <source src="assets/audio/It's All Good.mp3" type="audio/mp3">
     </audio>
 
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
@@ -384,9 +390,9 @@
     <script src="js/music-controls.js"></script>
     <script src="js/mobile-controls.js"></script>
     <script src="js/lanyard-presence.js"></script>
-    <script src="js/presence-fx.js"></script>
     <script src="js/custom-cursor.js"></script>
     <script type="module" src="js/three-background.js"></script>
     <script type="module" src="js/hero-three.js"></script>
+    <script type="module" src="js/presence-three.js"></script>
 </body>
 </html>

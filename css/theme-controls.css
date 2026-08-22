@@ -162,16 +162,16 @@
 
 @media (max-width: 768px) {
   .theme-switch__track {
-    width: 60px;
-    height: 30px;
-    padding: 0 7px;
+    width: 64px;
+    height: 36px;
+    padding: 0 8px;
   }
 
   .theme-switch__thumb {
-    width: 20px;
-    height: 20px;
-    top: 4px;
-    left: 4px;
+    width: 22px;
+    height: 22px;
+    top: 6px;
+    left: 6px;
   }
 
   .theme-switch input:checked + .theme-switch__track .theme-switch__thumb {

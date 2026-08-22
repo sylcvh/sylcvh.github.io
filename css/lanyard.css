@@ -1,13 +1,14 @@
 /* ── Presence stage ── */
 .presence-wrap,
 .presence-stage {
-  --lanyard-accent: var(--accent, #b8ff3c);
-  --lanyard-accent-soft: var(--accent-soft, rgba(184, 255, 60, 0.14));
+  --lanyard-accent: var(--accent, #00e8ff);
+  --lanyard-accent-soft: var(--accent-soft, rgba(0, 232, 255, 0.16));
   position: relative;
   width: 100%;
   max-width: 780px;
   margin: 0 auto;
-  padding: 3rem 0 2rem;
+  padding: 4.5rem 0 3.25rem;
+  min-height: 28rem;
   isolation: isolate;
 }
 
@@ -67,16 +68,15 @@
 
 /* ── Lanyard card ── */
 .lanyard-card {
-  --lanyard-accent: var(--accent, #b8ff3c);
-  --lanyard-accent-soft: var(--accent-soft, rgba(184, 255, 60, 0.14));
+  --lanyard-accent: var(--accent, #00e8ff);
+  --lanyard-accent-soft: var(--accent-soft, rgba(0, 232, 255, 0.16));
   position: relative;
   z-index: 2;
   width: 100%;
   margin: 2.25rem auto 0;
   border: 1px solid color-mix(in srgb, var(--line) 80%, var(--lanyard-accent) 20%);
   border-radius: var(--radius, 2px);
-  background:
-    linear-gradient(145deg, color-mix(in srgb, var(--surface) 94%, transparent), color-mix(in srgb, var(--bg) 40%, transparent));
+  background: color-mix(in srgb, var(--surface) 92%, var(--bg) 8%);
   backdrop-filter: blur(18px);
   overflow: hidden;
   text-align: left;
@@ -253,7 +253,7 @@
 .lanyard-card__waveform span {
   flex: 1;
   min-width: 2px;
-  height: 20%;
+  height: 100%;
   background: color-mix(in srgb, var(--lanyard-accent) 55%, var(--line));
   border-radius: 1px;
   transform-origin: bottom;
@@ -395,7 +395,12 @@
   display: block;
   border: 1px solid var(--line);
   background: var(--surface);
-  transition: border-color 0.35s ease, box-shadow 0.35s ease;
+  opacity: 0;
+  transition: border-color 0.35s ease, box-shadow 0.35s ease, opacity 0.3s ease;
+}
+
+.lanyard-card__avatar.is-ready {
+  opacity: 1;
 }
 
 .lanyard-card__avatar-badge {
@@ -412,18 +417,18 @@
 }
 
 .lanyard-card.is-online .lanyard-card__avatar-badge {
-  background: #54e29b;
-  box-shadow: 0 0 10px rgba(84, 226, 155, 0.45);
+  background: var(--accent, #00e8ff);
+  box-shadow: 0 0 10px var(--accent-glow);
 }
 
 .lanyard-card.is-idle .lanyard-card__avatar-badge {
-  background: #f0c35b;
-  box-shadow: 0 0 10px rgba(240, 195, 91, 0.35);
+  background: var(--accent-blue, #4f7cff);
+  box-shadow: 0 0 10px var(--accent-blue-soft);
 }
 
 .lanyard-card.is-dnd .lanyard-card__avatar-badge {
-  background: #ef6b6b;
-  box-shadow: 0 0 10px rgba(239, 107, 107, 0.35);
+  background: var(--accent-red, #ff3b5c);
+  box-shadow: 0 0 10px var(--accent-red-soft);
 }
 
 .lanyard-card.is-offline .lanyard-card__avatar-badge {
@@ -541,9 +546,9 @@
   animation: statusPulse 2.4s ease-in-out infinite;
 }
 
-.lanyard-card.is-online .lanyard-card__status-dot { color: #54e29b; }
-.lanyard-card.is-idle .lanyard-card__status-dot { color: #f0c35b; }
-.lanyard-card.is-dnd .lanyard-card__status-dot { color: #ef6b6b; }
+.lanyard-card.is-online .lanyard-card__status-dot { color: var(--accent, #00e8ff); }
+.lanyard-card.is-idle .lanyard-card__status-dot { color: var(--accent-blue, #4f7cff); }
+.lanyard-card.is-dnd .lanyard-card__status-dot { color: var(--accent-red, #ff3b5c); }
 .lanyard-card.is-offline .lanyard-card__status-dot { color: #6d7684; }
 
 .lanyard-chip {
@@ -563,19 +568,19 @@
 }
 
 .lanyard-chip[data-lanyard-status="online"] {
-  border-color: rgba(84, 226, 155, 0.4);
-  color: #54e29b;
-  box-shadow: 0 0 16px rgba(84, 226, 155, 0.12);
+  border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+  color: var(--accent);
+  box-shadow: 0 0 16px var(--accent-glow);
 }
 
 .lanyard-chip[data-lanyard-status="idle"] {
-  border-color: rgba(240, 195, 91, 0.4);
-  color: #f0c35b;
+  border-color: color-mix(in srgb, var(--accent-blue) 45%, transparent);
+  color: var(--accent-blue);
 }
 
 .lanyard-chip[data-lanyard-status="dnd"] {
-  border-color: rgba(239, 107, 107, 0.4);
-  color: #ef6b6b;
+  border-color: color-mix(in srgb, var(--accent-red) 45%, transparent);
+  color: var(--accent-red);
 }
 
 .lanyard-chip[data-lanyard-status="offline"] {
@@ -611,13 +616,76 @@
   opacity: 0.9;
 }
 
+.lanyard-card__spotify {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin-top: 0.85rem;
+  padding: 0.65rem;
+  border: 1px solid color-mix(in srgb, var(--lanyard-accent) 35%, var(--line));
+  background: color-mix(in srgb, var(--bg) 40%, transparent);
+}
+
+.lanyard-card__spotify[hidden] {
+  display: none;
+}
+
+.lanyard-card__album {
+  width: 56px;
+  height: 56px;
+  object-fit: cover;
+  border: 1px solid var(--line);
+  flex: 0 0 auto;
+}
+
+.lanyard-card__spotify-copy {
+  min-width: 0;
+  flex: 1;
+}
+
+.lanyard-card__track {
+  margin: 0 0 0.45rem;
+  font-size: 0.82rem;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.lanyard-card__progress {
+  height: 3px;
+  background: color-mix(in srgb, var(--line) 70%, transparent);
+  overflow: hidden;
+}
+
+.lanyard-card__progress span {
+  display: block;
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--accent-red), var(--accent), var(--accent-blue));
+  transform-origin: left center;
+}
+
+.lanyard-card.is-listening .lanyard-card__waveform span {
+  animation-duration: 0.7s;
+  background: var(--lanyard-accent);
+}
+
 .presence-stage:hover .lanyard-card {
   border-color: color-mix(in srgb, var(--lanyard-accent) 35%, var(--line));
 }
 
-.presence-stage.is-holding .lanyard-card {
-  transform: scale(0.988);
-  box-shadow: 0 0 40px var(--accent-glow), 0 24px 48px rgba(0, 0, 0, 0.12);
+.presence-stage.is-holding .lanyard-card,
+.presence-stage.is-pulsed .lanyard-card {
+  box-shadow: 0 0 28px var(--accent-glow);
+}
+
+.lanyard-card.is-connecting [data-lanyard-title] {
+  color: var(--muted);
+}
+
+.lanyard-card.is-error [data-lanyard-subtitle] {
+  color: var(--accent-red, #ff3b5c);
 }
 
 @keyframes statusPulse {
@@ -627,7 +695,8 @@
 
 @media (max-width: 768px) {
   .presence-stage {
-    padding: 2.5rem 0 1.5rem;
+    padding: 3.25rem 0 calc(5.5rem + env(safe-area-inset-bottom, 0px));
+    min-height: 0;
   }
 
   .presence-stage__hint {
@@ -692,6 +761,6 @@
 
 @media (pointer: coarse) {
   .presence-stage__hint {
-    pointer-events: none;
+    pointer-events: auto;
   }
 }

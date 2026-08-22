@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!checkbox) return;
 
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const colors = { dark: '#09090e', light: '#f7f5f0' };
+    const colors = { dark: '#07060f', light: '#f3f5fb' };
     let swapping = false;
 
     function readTheme() {

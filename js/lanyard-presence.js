@@ -1,309 +1,398 @@
-function initLanyardPresence() {
-    const lanyardCard = document.getElementById('lanyard-card');
-    if (!lanyardCard) return;
+(function initLanyardPresence() {
+    const card = document.getElementById('lanyard-card');
+    if (!card) return;
 
-    const lanyardTitle = document.querySelector('[data-lanyard-title]');
-    const lanyardHandle = document.querySelector('[data-lanyard-handle]');
-    const lanyardSubtitle = document.querySelector('[data-lanyard-subtitle]');
-    const lanyardStatus = document.querySelector('[data-lanyard-status]');
-    const lanyardStatusLabel = document.querySelector('[data-lanyard-status-label]');
-    const lanyardKv = document.querySelector('[data-lanyard-kv]');
-    const lanyardAvatar = document.querySelector('.lanyard-card__avatar');
-    const lanyardSync = document.querySelector('[data-lanyard-sync]');
-    const lanyardSignal = document.querySelector('[data-lanyard-signal]');
+    const userId = (card.dataset.lanyardUserId || '').trim();
+    const $ = (sel) => card.querySelector(sel);
+    const title = $('[data-lanyard-title]');
+    const handle = $('[data-lanyard-handle]');
+    const subtitle = $('[data-lanyard-subtitle]');
+    const activityType = $('[data-lanyard-activity-type]');
+    const statusChip = $('[data-lanyard-status]');
+    const statusLabel = $('[data-lanyard-status-label]');
+    const statusBadge = $('[data-lanyard-status-badge]');
+    const syncEl = $('[data-lanyard-sync]');
+    const signalEl = $('[data-lanyard-signal]');
+    const deviceEl = $('[data-lanyard-device]');
+    const activityCountEl = $('[data-lanyard-activity-count]');
+    const updatedEl = $('[data-lanyard-updated]');
+    const kvEl = $('[data-lanyard-kv]');
+    const avatar = $('.lanyard-card__avatar');
+    const spotifyEl = $('[data-lanyard-spotify]');
+    const albumEl = $('[data-lanyard-album]');
+    const trackEl = $('[data-lanyard-track]');
+    const progressEl = $('[data-lanyard-progress]');
+    const stage = card.closest('.presence-stage, .presence-wrap');
+    const hint = document.getElementById('presence-blast-hint');
 
-    const lanyardActivityType = document.querySelector('[data-lanyard-activity-type]');
-    const lanyardUpdated = document.querySelector('[data-lanyard-updated]');
-    const lanyardStatusBadge = document.querySelector('[data-lanyard-status-badge]');
+    const restUrl = userId ? `https://api.lanyard.rest/v1/users/${encodeURIComponent(userId)}` : '';
+    const socketUrl = 'wss://api.lanyard.rest/socket';
 
-    const userId = (lanyardCard.dataset.lanyardUserId || '').trim();
-    if (!userId) {
-        if (lanyardTitle) lanyardTitle.textContent = 'Connect your Discord ID';
-        if (lanyardSubtitle) lanyardSubtitle.textContent = 'Set data-lanyard-user-id on this card to show live presence updates.';
-        if (lanyardStatusLabel) lanyardStatusLabel.textContent = 'No user id';
-        if (lanyardStatus) lanyardStatus.dataset.lanyardStatus = 'offline';
-        lanyardCard.classList.add('is-offline');
-        return;
+    let socket = null;
+    let heartbeatId = 0;
+    let reconnectId = 0;
+    let pollId = 0;
+    let progressId = 0;
+    let generation = 0;
+    let stopped = false;
+    let liveSocket = false;
+    let lastAvatar = '';
+    let lastStatus = '';
+    let spotifyRange = null;
+
+    function setSync(text) {
+        if (syncEl) syncEl.textContent = text;
     }
 
-    const apiUrl = `https://api.lanyard.rest/v1/users/${encodeURIComponent(userId)}`;
-    const socketUrl = 'wss://api.lanyard.rest/socket';
-    let socket;
-    let heartbeatId;
-    let reconnectId;
-    let closedByCode = false;
+    function setUpdated(text) {
+        if (updatedEl) updatedEl.textContent = text;
+    }
 
-    const clearTimers = () => {
-        if (heartbeatId) {
-            clearInterval(heartbeatId);
-            heartbeatId = null;
+    function cssVar(name, fallback) {
+        const value = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+        return value || fallback;
+    }
+
+    function accentFor(status) {
+        if (status === 'online') return { color: cssVar('--accent', '#00e8ff'), soft: cssVar('--accent-soft', 'rgba(0, 232, 255, 0.16)') };
+        if (status === 'idle') return { color: cssVar('--accent-blue', '#4f7cff'), soft: cssVar('--accent-blue-soft', 'rgba(79, 124, 255, 0.16)') };
+        if (status === 'dnd') return { color: cssVar('--accent-red', '#ff3b5c'), soft: cssVar('--accent-red-soft', 'rgba(255, 59, 92, 0.16)') };
+        return { color: '#6d7684', soft: 'rgba(109, 118, 132, 0.18)' };
+    }
+
+    function unwrap(payload) {
+        if (!payload || typeof payload !== 'object') return null;
+        if (payload.discord_user || payload.discord_status) return payload;
+        if (userId && payload[userId]) return payload[userId];
+        const values = Object.values(payload);
+        if (values.length === 1 && values[0] && typeof values[0] === 'object') return values[0];
+        return null;
+    }
+
+    function avatarUrl(user) {
+        if (user.avatar) {
+            const ext = user.avatar.startsWith('a_') ? 'gif' : 'png';
+            return `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.${ext}?size=256`;
         }
-        if (reconnectId) {
-            clearTimeout(reconnectId);
-            reconnectId = null;
+        const index = Number(user.discriminator) % 5 || 0;
+        return `https://cdn.discordapp.com/embed/avatars/${index}.png`;
+    }
+
+    function devicesOf(presence) {
+        const list = [];
+        if (presence.active_on_discord_desktop) list.push('desktop');
+        if (presence.active_on_discord_mobile) list.push('mobile');
+        if (presence.active_on_discord_web) list.push('web');
+        if (presence.active_on_discord_embedded) list.push('embedded');
+        return list;
+    }
+
+    function pickActivity(presence) {
+        const list = presence.activities || [];
+        return list.find((item) => item.type === 0 || item.type === 1 || item.type === 2)
+            || list.find((item) => item.type === 4)
+            || null;
+    }
+
+    function activityCopy(presence, status) {
+        if (presence.listening_to_spotify && presence.spotify) {
+            const song = presence.spotify.song || 'Spotify';
+            const artist = presence.spotify.artist ? ` by ${presence.spotify.artist}` : '';
+            return { type: 'Spotify', text: `Listening to ${song}${artist}` };
         }
-    };
 
-    const getActivityLabel = (presence) => {
-        const activeActivity = (presence.activities || []).find((activity) => activity.type === 0 || activity.type === 1 || activity.type === 2 || activity.type === 4);
-        if (!activeActivity) return 'No active activity';
+        const active = pickActivity(presence);
+        if (!active) return { type: 'Status', text: 'No active activity' };
 
-        if (activeActivity.type === 2 && activeActivity.details) {
-            return activeActivity.details;
-        }
+        const types = { 0: 'Playing', 1: 'Streaming', 2: 'Listening', 4: 'Custom' };
+        const type = types[active.type] || 'Status';
+        const text = active.type === 4
+            ? (active.state || active.name || 'Custom status')
+            : [active.name, active.details, active.state].filter(Boolean).slice(0, 2).join(' · ');
+        return { type, text: text || 'Active on Discord' };
+    }
 
-        if (activeActivity.type === 4 && activeActivity.state) {
-            return activeActivity.state;
-        }
-
-        return activeActivity.name || 'Active on Discord';
-    };
-
-    const getStatusLabel = (status) => {
-        switch (status) {
-            case 'online': return 'Online';
-            case 'idle': return 'Idle';
-            case 'dnd': return 'Do not disturb';
-            default: return 'Offline';
-        }
-    };
-
-    const getPresenceAccent = (status) => {
-        switch (status) {
-            case 'online':
-                return { color: '#54e29b', soft: 'rgba(84, 226, 155, 0.18)' };
-            case 'idle':
-                return { color: '#f0c35b', soft: 'rgba(240, 195, 91, 0.18)' };
-            case 'dnd':
-                return { color: '#ef6b6b', soft: 'rgba(239, 107, 107, 0.18)' };
-            default:
-                return { color: '#6d7684', soft: 'rgba(109, 118, 132, 0.18)' };
-        }
-    };
-
-    const getDisplayName = (presence) => {
-        const discordUser = presence.discord_user || {};
-        return discordUser.global_name || discordUser.display_name || presence.display_name || discordUser.nick || discordUser.username || 'Discord presence active';
-    };
-
-    const getHandle = (presence) => {
-        const discordUser = presence.discord_user || {};
-        return discordUser.username || 'Discord';
-    };
-
-    const getAvatarUrl = (presence) => {
-        const discordUser = presence.discord_user || {};
-        if (discordUser.avatar) {
-            const extension = discordUser.avatar.startsWith('a_') ? 'gif' : 'png';
-            return `https://cdn.discordapp.com/avatars/${discordUser.id}/${discordUser.avatar}.${extension}?size=256`;
-        }
-        return `https://api.lanyard.rest/${discordUser.id || userId}.png`;
-    };
-
-    const setPresence = (presence) => {
+    function render(raw) {
+        const presence = unwrap(raw);
         if (!presence) return;
 
-        const status = presence.discord_status || 'offline';
-        const discordUser = presence.discord_user || {};
-        const accent = getPresenceAccent(status);
+        const user = presence.discord_user || {};
+        const status = ['online', 'idle', 'dnd'].includes(presence.discord_status)
+            ? presence.discord_status
+            : 'offline';
+        const accent = accentFor(status);
 
-        lanyardCard.classList.remove('is-online', 'is-idle', 'is-dnd', 'is-offline');
-        lanyardCard.classList.add(`is-${status === 'online' || status === 'idle' || status === 'dnd' ? status : 'offline'}`);
-        lanyardCard.style.setProperty('--lanyard-accent', accent.color);
-        lanyardCard.style.setProperty('--lanyard-accent-soft', accent.soft);
-        const stage = lanyardCard.closest('.presence-stage, .presence-wrap');
+        card.classList.remove('is-online', 'is-idle', 'is-dnd', 'is-offline', 'is-error', 'is-connecting');
+        card.classList.add(`is-${status}`);
+        card.style.setProperty('--lanyard-accent', accent.color);
+        card.style.setProperty('--lanyard-accent-soft', accent.soft);
         if (stage) {
             stage.style.setProperty('--lanyard-accent', accent.color);
             stage.style.setProperty('--lanyard-accent-soft', accent.soft);
         }
 
-        if (lanyardTitle) {
-            lanyardTitle.textContent = getDisplayName(presence);
+        if (title) title.textContent = user.global_name || user.display_name || user.username || 'Unknown';
+        if (handle) handle.textContent = (user.username || '').replace(/^@/, '') || 'discord';
+
+        const copy = activityCopy(presence, status);
+        if (activityType) activityType.textContent = copy.type;
+        if (subtitle) subtitle.textContent = copy.text;
+
+        if (statusChip) statusChip.dataset.lanyardStatus = status;
+        if (statusLabel) statusLabel.textContent = ({ online: 'Online', idle: 'Idle', dnd: 'Do not disturb' }[status] || 'Offline');
+        if (statusBadge) statusBadge.dataset.status = status;
+
+        setSync(liveSocket ? (status === 'offline' ? 'standby' : 'live') : 'polling');
+        if (signalEl) {
+            signalEl.textContent = ({ online: 'strong', idle: 'stable', dnd: 'focused' }[status] || 'weak');
         }
 
-        if (lanyardHandle) {
-            const handle = getHandle(presence);
-            lanyardHandle.textContent = handle.startsWith('@') ? handle.slice(1) : handle;
-        }
+        const devices = devicesOf(presence);
+        if (deviceEl) deviceEl.textContent = devices.length ? devices.join(' + ') : 'none';
+        if (activityCountEl) activityCountEl.textContent = String((presence.activities || []).length);
+        setUpdated(`Synced ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`);
 
-        if (lanyardSubtitle) {
-            if (presence.listening_to_spotify && presence.spotify) {
-                const song = presence.spotify.song || 'Spotify';
-                const artist = presence.spotify.artist ? ` by ${presence.spotify.artist}` : '';
-                lanyardSubtitle.textContent = `Listening to ${song}${artist}`;
+        const listening = Boolean(presence.listening_to_spotify && presence.spotify);
+        card.classList.toggle('is-listening', listening);
+        if (spotifyEl) {
+            if (listening) {
+                const song = presence.spotify.song || 'Unknown track';
+                const artist = presence.spotify.artist || '';
+                if (trackEl) trackEl.textContent = artist ? `${song} · ${artist}` : song;
+                if (albumEl && presence.spotify.album_art_url) {
+                    albumEl.src = presence.spotify.album_art_url;
+                    albumEl.alt = presence.spotify.album ? `${presence.spotify.album} cover` : '';
+                }
+                const start = presence.spotify.timestamps && presence.spotify.timestamps.start;
+                const end = presence.spotify.timestamps && presence.spotify.timestamps.end;
+                spotifyRange = start && end ? { start, end } : null;
+                spotifyEl.hidden = false;
             } else {
-                lanyardSubtitle.textContent = getActivityLabel(presence);
+                spotifyRange = null;
+                spotifyEl.hidden = true;
             }
         }
 
-        if (lanyardActivityType) {
-            if (presence.listening_to_spotify && presence.spotify) {
-                lanyardActivityType.textContent = 'Spotify';
-            } else {
-                const active = (presence.activities || []).find((a) => a.type === 0 || a.type === 1 || a.type === 2 || a.type === 4);
-                if (!active) lanyardActivityType.textContent = 'Status';
-                else if (active.type === 0) lanyardActivityType.textContent = 'Playing';
-                else if (active.type === 1) lanyardActivityType.textContent = 'Streaming';
-                else if (active.type === 2) lanyardActivityType.textContent = 'Listening';
-                else lanyardActivityType.textContent = 'Custom';
-            }
-        }
-
-        if (lanyardSync) {
-            lanyardSync.textContent = status === 'offline' ? 'standby' : 'live';
-        }
-
-        if (lanyardSignal) {
-            const strength = status === 'online' ? 'strong'
-                : status === 'idle' ? 'stable'
-                    : status === 'dnd' ? 'focused' : 'weak';
-            lanyardSignal.textContent = strength;
-        }
-
-        if (lanyardUpdated) {
-            const now = new Date();
-            lanyardUpdated.textContent = `Synced ${now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
-        }
-
-        if (lanyardStatusBadge) {
-            lanyardStatusBadge.dataset.status = status;
-        }
-
-        if (lanyardStatus) {
-            lanyardStatus.dataset.lanyardStatus = status === 'online' || status === 'idle' || status === 'dnd' ? status : 'offline';
-        }
-
-        if (lanyardStatusLabel) {
-            lanyardStatusLabel.textContent = getStatusLabel(status);
-        }
-
-        if (lanyardKv) {
-            lanyardKv.innerHTML = '';
-            const kvEntries = Object.entries(presence.kv || {});
-
-            if (kvEntries.length > 0) {
-                kvEntries.forEach(([key, value]) => {
+        if (kvEl) {
+            kvEl.replaceChildren();
+            const entries = Object.entries(presence.kv || {});
+            if (entries.length) {
+                entries.forEach(([key, value]) => {
                     const chip = document.createElement('span');
                     chip.className = 'lanyard-kv-chip';
-
-                    const keySpan = document.createElement('span');
-                    keySpan.className = 'lanyard-kv-chip__key';
-                    keySpan.textContent = `${key}:`;
-
-                    const valueSpan = document.createElement('span');
-                    valueSpan.className = 'lanyard-kv-chip__value';
-                    valueSpan.textContent = value;
-
-                    chip.appendChild(keySpan);
-                    chip.appendChild(valueSpan);
-                    lanyardKv.appendChild(chip);
+                    const k = document.createElement('span');
+                    k.className = 'lanyard-kv-chip__key';
+                    k.textContent = `${key}:`;
+                    const v = document.createElement('span');
+                    v.className = 'lanyard-kv-chip__value';
+                    v.textContent = String(value);
+                    chip.append(k, v);
+                    kvEl.append(chip);
                 });
-                lanyardKv.hidden = false;
+                kvEl.hidden = false;
             } else {
-                lanyardKv.hidden = true;
+                kvEl.hidden = true;
             }
         }
 
-        if (lanyardAvatar) {
-            lanyardAvatar.src = getAvatarUrl(presence);
-            lanyardAvatar.alt = discordUser.username ? `${discordUser.username}'s Discord avatar` : 'Discord avatar';
+        const src = avatarUrl(user);
+        if (avatar && src !== lastAvatar) {
+            lastAvatar = src;
+            avatar.classList.remove('is-ready');
+            avatar.onload = () => avatar.classList.add('is-ready');
+            avatar.onerror = () => avatar.classList.remove('is-ready');
+            avatar.src = src;
+            avatar.alt = user.username ? `${user.username}'s Discord avatar` : 'Discord avatar';
         }
 
-        lanyardCard.dispatchEvent(new CustomEvent('lanyard:status', {
+        if (status !== lastStatus) {
+            lastStatus = status;
+            card.dispatchEvent(new CustomEvent('lanyard:status', { bubbles: true, detail: { status, accent } }));
+        }
+        card.dispatchEvent(new CustomEvent('lanyard:presence', {
             bubbles: true,
-            detail: { status, accent },
+            detail: { status, accent, listening, activities: presence.activities || [] },
         }));
-    };
+    }
 
-    const connectSocket = () => {
-        clearTimers();
+    function fail(message) {
+        card.classList.add('is-error');
+        setSync('offline');
+        if (title && title.textContent === 'Loading presence…') title.textContent = 'Presence unavailable';
+        if (subtitle) subtitle.textContent = message;
+        setUpdated('Could not reach Lanyard');
+    }
 
-        socket = new WebSocket(socketUrl);
-
-        socket.addEventListener('open', async () => {
-            try {
-                const response = await fetch(apiUrl, { cache: 'no-store' });
-                const payload = await response.json();
-                if (payload && payload.success && payload.data) {
-                    setPresence(payload.data);
-                }
-            } catch (error) {
-                console.log('Lanyard REST fetch failed:', error);
+    async function pullRest() {
+        if (!restUrl) return false;
+        try {
+            const response = await fetch(restUrl, { cache: 'no-store' });
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            const payload = await response.json();
+            if (payload && payload.success && payload.data) {
+                render(payload.data);
+                return true;
             }
+            throw new Error('Empty presence');
+        } catch (error) {
+            if (!lastStatus) fail('Could not load Discord presence');
+            console.log('Lanyard REST failed:', error);
+            return false;
+        }
+    }
+
+    function clearHeartbeat() {
+        if (heartbeatId) {
+            clearInterval(heartbeatId);
+            heartbeatId = 0;
+        }
+    }
+
+    function dropSocket() {
+        clearHeartbeat();
+        liveSocket = false;
+        if (socket) {
+            const old = socket;
+            socket = null;
+            try { old.close(); } catch { /* already closed */ }
+        }
+    }
+
+    function connectSocket() {
+        if (stopped || !userId) return;
+        generation += 1;
+        const gen = generation;
+        window.clearTimeout(reconnectId);
+        dropSocket();
+        setSync('connecting');
+
+        const next = new WebSocket(socketUrl);
+        socket = next;
+
+        next.addEventListener('open', () => {
+            if (gen !== generation) return;
         });
 
-        socket.addEventListener('message', (event) => {
+        next.addEventListener('message', (event) => {
+            if (gen !== generation) return;
+            let message;
             try {
-                const message = JSON.parse(event.data);
-
-                if (message.op === 1 && message.d?.heartbeat_interval) {
-                    socket.send(JSON.stringify({ op: 2, d: { subscribe_to_ids: [userId] } }));
-                    heartbeatId = window.setInterval(() => {
-                        if (socket && socket.readyState === WebSocket.OPEN) {
-                            socket.send(JSON.stringify({ op: 3 }));
-                        }
-                    }, message.d.heartbeat_interval);
-                    return;
-                }
-
-                if (message.t === 'INIT_STATE' && message.d) {
-                    setPresence(message.d[userId] || message.d);
-                    return;
-                }
-
-                if (message.t === 'PRESENCE_UPDATE' && message.d) {
-                    setPresence(message.d);
-                }
-            } catch (error) {
-                console.log('Lanyard socket message error:', error);
-            }
-        });
-
-        socket.addEventListener('close', () => {
-            clearTimers();
-
-            if (closedByCode) {
+                message = JSON.parse(event.data);
+            } catch {
                 return;
             }
 
-            reconnectId = window.setTimeout(connectSocket, 5000);
-        });
+            if (message.op === 1) {
+                const interval = Number(message.d && message.d.heartbeat_interval) || 30000;
+                next.send(JSON.stringify({ op: 2, d: { subscribe_to_id: userId } }));
+                clearHeartbeat();
+                heartbeatId = window.setInterval(() => {
+                    if (socket === next && next.readyState === WebSocket.OPEN) {
+                        next.send(JSON.stringify({ op: 3 }));
+                    }
+                }, interval);
+                return;
+            }
 
-        socket.addEventListener('error', () => {
-            try {
-                if (socket && socket.readyState === WebSocket.OPEN) {
-                    socket.close();
-                }
-            } catch (error) {
-                console.log('Lanyard socket error:', error);
+            if (message.op !== 0) return;
+
+            if (message.t === 'INIT_STATE' || message.t === 'PRESENCE_UPDATE') {
+                liveSocket = true;
+                render(message.d);
             }
         });
-    };
 
-    fetch(apiUrl, { cache: 'no-store' })
-        .then((response) => response.json())
-        .then((payload) => {
-            if (payload && payload.success && payload.data) {
-                setPresence(payload.data);
-            }
-        })
-        .catch((error) => {
-            console.log('Lanyard REST fetch failed:', error);
+        next.addEventListener('close', () => {
+            if (gen !== generation || stopped) return;
+            liveSocket = false;
+            clearHeartbeat();
+            setSync('reconnecting');
+            reconnectId = window.setTimeout(connectSocket, 4000);
         });
 
+        next.addEventListener('error', () => {
+            if (socket === next) {
+                try { next.close(); } catch { /* ignore */ }
+            }
+        });
+    }
+
+    function tickProgress() {
+        if (!progressEl) return;
+        if (!spotifyRange) {
+            progressEl.style.width = '0%';
+            return;
+        }
+        const span = spotifyRange.end - spotifyRange.start;
+        if (span <= 0) return;
+        const ratio = Math.min(1, Math.max(0, (Date.now() - spotifyRange.start) / span));
+        progressEl.style.width = `${(ratio * 100).toFixed(1)}%`;
+    }
+
+    function bindHint() {
+        if (!hint || !stage) return;
+        const coarse = window.matchMedia('(pointer: coarse)').matches;
+        const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        let holding = false;
+        let holdTimer = 0;
+
+        hint.querySelector('span:first-child')?.replaceChildren(document.createTextNode(coarse ? 'tap to' : 'hold to'));
+        hint.setAttribute('aria-label', coarse ? 'Tap to pulse presence' : 'Hold to pulse presence');
+
+        function pulse(on) {
+            stage.classList.toggle('is-pulsed', on);
+            hint.classList.toggle('is-pulsed', on);
+        }
+
+        function start(event) {
+            event.preventDefault();
+            if (reduced || holding) return;
+            holding = true;
+            stage.classList.add('is-holding');
+            hint.classList.add('is-holding');
+            holdTimer = window.setTimeout(() => pulse(true), coarse ? 0 : 260);
+        }
+
+        function end() {
+            if (!holding) return;
+            holding = false;
+            stage.classList.remove('is-holding');
+            hint.classList.remove('is-holding');
+            window.clearTimeout(holdTimer);
+            window.setTimeout(() => pulse(false), 800);
+        }
+
+        hint.addEventListener('pointerdown', start);
+        hint.addEventListener('pointerup', end);
+        hint.addEventListener('pointerleave', end);
+        hint.addEventListener('pointercancel', end);
+    }
+
+    if (!userId) {
+        card.classList.add('is-offline', 'is-error');
+        if (title) title.textContent = 'Missing Discord ID';
+        if (subtitle) subtitle.textContent = 'Set data-lanyard-user-id on this card.';
+        setSync('offline');
+        bindHint();
+        return;
+    }
+
+    card.classList.add('is-connecting');
+    setSync('connecting');
+    pullRest();
     connectSocket();
+    pollId = window.setInterval(() => {
+        if (!liveSocket) pullRest();
+    }, 25000);
+    progressId = window.setInterval(tickProgress, 400);
+    bindHint();
 
     window.addEventListener('beforeunload', () => {
-        closedByCode = true;
-        clearTimers();
-        if (socket && socket.readyState === WebSocket.OPEN) {
-            socket.close();
-        }
+        stopped = true;
+        generation += 1;
+        dropSocket();
+        window.clearTimeout(reconnectId);
+        window.clearInterval(pollId);
+        window.clearInterval(progressId);
     });
-}
-
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initLanyardPresence, { once: true });
-} else {
-    initLanyardPresence();
-}
+})();
